@@ -1,1 +1,41 @@
 @charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Noto+Sans+KR:wght@100..900&family=Oswald:wght@200..700&display=swap');
+
+*{
+    font-family: 'Nanum Gothic';
+}
+
+h5{
+    font-family: 'Noto Sans KR';
+    font-size: 16px;
+}
+
+h4{
+    font-family: 'Noto Sans KR';
+}
+h3{
+    font-family: 'Oswald';
+}
+
+h2{
+    font-family: 'Oswald';
+}
+
+h1{
+    font-family: 'Oswald';
+}
+
+/* 테이블 관련 디자인 처리*/
+
+thead th {
+    background-color: #006DCC;
+    color:white;
+    text-align: center;
+}
+
+tr td:first-child,
+tr th:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}

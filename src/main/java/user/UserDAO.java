@@ -71,6 +71,10 @@ public class UserDAO {
   
   public int registerCheck(String userId) {
 
+    if(userId == null || userId.equals("")) {
+      return 2;
+    }
+    
     Connection conn = null;
     PreparedStatement pStmt = null;
     ResultSet rSet = null;
@@ -81,7 +85,7 @@ public class UserDAO {
     try {
       conn = dataSource.getConnection();
       pStmt = conn.prepareStatement(sqlQuery);
-
+      pStmt.setString(1, userId);
       rSet = pStmt.executeQuery();
 
       if (rSet.next() && rSet.getString("userId").equals(userId)) {
@@ -114,7 +118,6 @@ public class UserDAO {
 
     Connection conn = null;
     PreparedStatement pStmt = null;
-    ResultSet rSet = null;
 
     String sqlQuery =
         " INSERT INTO users (user_id, user_password, user_name, user_age, user_gender, user_email)  VALUES (?, ?, ?, ?, ?, ?); ";
@@ -136,9 +139,6 @@ public class UserDAO {
       e.printStackTrace();
     } finally {
       try {
-        if (rSet != null) {
-          rSet.close();
-        }
         if (pStmt != null) {
           pStmt.close();
         }

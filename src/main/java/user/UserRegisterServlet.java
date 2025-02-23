@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/UserRegisterServlet")
+@WebServlet("/userRegisterServlet")
 public class UserRegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -39,7 +39,6 @@ public class UserRegisterServlet extends HttpServlet {
           response.sendRedirect("join.jsp");
           return;
         }
-	    
 	    
 	    UserDTO userDTO = new UserDTO();
 	    

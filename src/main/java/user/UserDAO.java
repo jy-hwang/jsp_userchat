@@ -20,7 +20,7 @@ public class UserDAO {
 
 
     } catch (Exception e) {
-      e.getMessage();
+      e.printStackTrace();
     }
 
   }
@@ -49,7 +49,7 @@ public class UserDAO {
         return 0;// 존재하지 않음
       }
     } catch (Exception e) {
-      e.getMessage();
+      e.printStackTrace();
     } finally {
       try {
         if (rSet != null) {
@@ -62,7 +62,7 @@ public class UserDAO {
           conn.close();
         }
       } catch (Exception e2) {
-        e2.getMessage();
+        e2.printStackTrace();
       }
     }
 
@@ -90,7 +90,7 @@ public class UserDAO {
         return 0;// OK
       }
     } catch (Exception e) {
-      e.getMessage();
+      e.printStackTrace();
     } finally {
       try {
         if (rSet != null) {
@@ -103,7 +103,7 @@ public class UserDAO {
           conn.close();
         }
       } catch (Exception e2) {
-        e2.getMessage();
+        e2.printStackTrace();
       }
     }
 
@@ -133,7 +133,7 @@ public class UserDAO {
       return pStmt.executeUpdate();
 
     } catch (Exception e) {
-      e.getMessage();
+      e.printStackTrace();
     } finally {
       try {
         if (rSet != null) {
@@ -146,7 +146,7 @@ public class UserDAO {
           conn.close();
         }
       } catch (Exception e2) {
-        e2.getMessage();
+        e2.printStackTrace();
       }
     }
 

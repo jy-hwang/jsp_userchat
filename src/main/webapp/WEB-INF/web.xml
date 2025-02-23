@@ -17,6 +17,15 @@
   <res-auth>Container</res-auth>
 </resource-ref>
   <servlet>
+    <servlet-name>UserRegisterCheckServlet</servlet-name>
+    <servlet-class>user.UserRegisterCheckServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserRegisterCheckServlet</servlet-name>
+    <url-pattern>/userRegisterCheck</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>UserRegisterServlet</servlet-name>
     <servlet-class>user.UserRegisterServlet</servlet-class>
   </servlet>

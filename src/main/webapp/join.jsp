@@ -40,7 +40,7 @@ pageEncoding="UTF-8"%>
         </ul>
 
 <%
-if(userId == null){
+  if(userId == null){
 %>
 
         <ul class="nav navbar-nav navbar-right">
@@ -62,7 +62,7 @@ if(userId == null){
         </ul>
 
 <%
-} else {
+  } else {
 %>
 
         <ul class="nav navbar-nav navbar-right">
@@ -80,7 +80,7 @@ if(userId == null){
         </ul>
 
 <%
-}
+  }
 %>
 
       </div>

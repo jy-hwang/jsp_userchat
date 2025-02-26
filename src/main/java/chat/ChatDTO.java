@@ -6,11 +6,11 @@ public class ChatDTO {
   private int chatNo;
 
   private String fromId;
-  
+
   private String toId;
-  
+
   private String chatContent;
-  
+
   private String createdDate;
 
   public int getChatNo() {

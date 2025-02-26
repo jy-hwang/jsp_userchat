@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import util.StringUtils;
 
 @WebServlet("/chatSubmitServlet")
 public class ChatSubmitServlet extends HttpServlet {
@@ -22,9 +23,9 @@ public class ChatSubmitServlet extends HttpServlet {
     String toId = request.getParameter("toId");
     String chatContent = request.getParameter("chatContent");
 
-    if (isEmpty(request.getParameter("fromId")) ||
-        isEmpty(request.getParameter("toId")) ||
-        isEmpty(request.getParameter("chatContent"))) {
+    if (StringUtils.isEmpty(request.getParameter("fromId")) ||
+        StringUtils.isEmpty(request.getParameter("toId")) ||
+        StringUtils.isEmpty(request.getParameter("chatContent"))) {
       response.getWriter().write("0");
     } else {
       fromId = URLDecoder.decode(fromId, "UTF-8");
@@ -35,7 +36,4 @@ public class ChatSubmitServlet extends HttpServlet {
 
   }
 
-  private boolean isEmpty(String param) {
-    return param == null || param.trim().isEmpty() || param.equalsIgnoreCase("null");
-  }
 }

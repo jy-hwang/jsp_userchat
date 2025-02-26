@@ -1,0 +1,96 @@
+package chat;
+
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import util.StringUtils;
+
+@WebServlet("/chatListServlet")
+public class ChatListServlet extends HttpServlet {
+  private static final long serialVersionUID = 1L;
+
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html;charset=UTF-8");
+
+    String fromId = request.getParameter("fromId");
+    String toId = request.getParameter("toId");
+    String listType = request.getParameter("listType");
+
+    if (StringUtils.isEmpty(request.getParameter("fromId"))
+        || StringUtils.isEmpty(request.getParameter("toId"))
+        || StringUtils.isEmpty(request.getParameter("listType"))) {
+      response.getWriter().write("");
+    } else if (listType.equals("ten")) {
+      response.getWriter().write(getTen(URLDecoder.decode(fromId, "UTF-8"), URLDecoder.decode(toId, "UTF-8")));
+    } else {
+      try {
+        response.getWriter().write(getId(URLDecoder.decode(fromId, "UTF-8"), URLDecoder.decode(toId, "UTF-8"), Integer.parseInt(listType)));
+      } catch (Exception e) {
+        response.getWriter().write("");
+      }
+    }
+
+  }
+
+  public String getTen(String fromId, String toId) {
+
+    StringBuffer result = new StringBuffer("");
+    // {"result":[
+    result.append("{\"result\":[");
+    ChatDAO chatDAO = new ChatDAO();
+    ArrayList<ChatDTO> chatList = chatDAO.getChatListByRecent(10, fromId, toId);
+    if (chatList.size() == 0) {
+      return "";
+    } else {
+      for (int i = 0; i < chatList.size(); i++) {
+        // [{"fromId" : " + chatList.get(i).getFromId() + "},
+        result.append("[{\"fromId\" : \"" + chatList.get(i).getFromId() + "\"},");
+        result.append("{\"toId\" : \"" + chatList.get(i).getToId() + "\"},");
+        result.append("{\"chatContent\" : \"" + chatList.get(i).getChatContent() + "\"},");
+        result.append("{\"createdDate\" : \"" + chatList.get(i).getCreatedDate() + "\"}]");
+        if (i != chatList.size() - 1) {
+          result.append(",");
+        }
+      }
+      // ], "last" : ""+ chatList.get(chatList.size() -1).getChatNo() + ""}
+      result.append(" ], \"last\" : \"" + chatList.get(chatList.size() - 1).getChatNo() + "\"}");
+      return result.toString();
+    }
+
+  }
+
+  public String getId(String fromId, String toId, int chatNo) {
+    
+    StringBuffer result = new StringBuffer("");
+    // {"result":[
+    result.append("{\"result\":[");
+    ChatDAO chatDAO = new ChatDAO();
+    ArrayList<ChatDTO> chatList = chatDAO.getChatListByNo(chatNo, fromId, toId);
+    if (chatList.size() == 0) {
+      return "";
+    } else {
+      for (int i = 0; i < chatList.size(); i++) {
+        // [{"fromId" : " + chatList.get(i).getFromId() + "},
+        result.append("[{\"fromId\" : \"" + chatList.get(i).getFromId() + "\"},");
+        result.append("{\"toId\" : \"" + chatList.get(i).getToId() + "\"},");
+        result.append("{\"chatContent\" : \"" + chatList.get(i).getChatContent() + "\"},");
+        result.append("{\"createdDate\" : \"" + chatList.get(i).getCreatedDate() + "\"}]");
+        if (i != chatList.size() - 1) {
+          result.append(",");
+        }
+      }
+      // ], "last" : ""+ chatList.get(chatList.size() -1).getChatNo() + ""}
+      result.append(" ], \"last\" : \"" + chatList.get(chatList.size() - 1).getChatNo() + "\"}");
+      return result.toString();
+    }
+    
+  }
+}

@@ -52,6 +52,14 @@
     <servlet-name>ChatSubmitServlet</servlet-name>
     <url-pattern>/chatSubmit</url-pattern>
   </servlet-mapping>
-  
+     
+  <servlet>
+    <servlet-name>ChatListServlet</servlet-name>
+    <servlet-class>chat.ChatListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChatListServlet</servlet-name>
+    <url-pattern>/chatList</url-pattern>
+  </servlet-mapping>
   
 </web-app>

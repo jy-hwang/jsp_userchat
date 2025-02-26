@@ -67,7 +67,7 @@ public class ChatDAO {
           chatTime -= 12;
         }
         chat.setCreatedDate(
-            tempTime.substring(0, 11) + " " + timeType + " " + tempTime.substring(14, 16) + "");
+            tempTime.substring(0, 11) + " " + timeType + " "+ chatTime + ":" + tempTime.substring(14, 16) + "");
         chatList.add(chat);
       }
 
@@ -105,7 +105,7 @@ public class ChatDAO {
     ResultSet rSet = null;
 
     String sqlQuery =
-        " SELECT chat_no AS chatNo, from_id AS fromId, to_id AS toId, chat_content AS chatContent, created_date AS createdDate FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) AND chat_no > (SELECT MAX(chat_no) - ? FROM chat)  ORDER BY created_date DESC; ";
+        " SELECT chat_no AS chatNo, from_id AS fromId, to_id AS toId, chat_content AS chatContent, created_date AS createdDate FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) AND chat_no > (SELECT MAX(chat_no) - ? FROM chats)  ORDER BY created_date DESC; ";
 
     try {
       conn = dataSource.getConnection();

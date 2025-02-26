@@ -23,9 +23,9 @@ public class ChatSubmitServlet extends HttpServlet {
     String toId = request.getParameter("toId");
     String chatContent = request.getParameter("chatContent");
 
-    if (StringUtils.isEmpty(request.getParameter("fromId")) ||
-        StringUtils.isEmpty(request.getParameter("toId")) ||
-        StringUtils.isEmpty(request.getParameter("chatContent"))) {
+    if (StringUtils.isEmpty(request.getParameter("fromId"))
+        || StringUtils.isEmpty(request.getParameter("toId"))
+        || StringUtils.isEmpty(request.getParameter("chatContent"))) {
       response.getWriter().write("0");
     } else {
       fromId = URLDecoder.decode(fromId, "UTF-8");

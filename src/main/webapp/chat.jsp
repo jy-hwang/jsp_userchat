@@ -3,29 +3,29 @@
 <html>
 <head>
 <%
-  String userId = null;
-  if (session.getAttribute("userId") != null) {
-    userId = (String) session.getAttribute("userId");
-  }
+String userId = null;
+if (session.getAttribute("userId") != null) {
+	userId = (String) session.getAttribute("userId");
+}
 
-  String toId = null;
-  if (request.getParameter("toId") != null) {
-    toId = (String) request.getParameter("toId");
-  }
-  
-  if (userId == null){
-    session.setAttribute("messageType","오류 메시지");
-    session.setAttribute("messageContent","현재 로그인이 되어있지 않습니다.");
-    response.sendRedirect("index.jsp");
-    return;
-  }
-  
-  if (toId == null){
-    session.setAttribute("messageType","오류 메시지");
-    session.setAttribute("messageContent","대화 상대가 지정되지 않았습니다.");
-    response.sendRedirect("index.jsp");
-    return;
-  }
+String toId = null;
+if (request.getParameter("toId") != null) {
+	toId = (String) request.getParameter("toId");
+}
+
+if (userId == null) {
+	session.setAttribute("messageType", "오류 메시지");
+	session.setAttribute("messageContent", "현재 로그인이 되어있지 않습니다.");
+	response.sendRedirect("index.jsp");
+	return;
+}
+
+if (toId == null) {
+	session.setAttribute("messageType", "오류 메시지");
+	session.setAttribute("messageContent", "대화 상대가 지정되지 않았습니다.");
+	response.sendRedirect("index.jsp");
+	return;
+}
 %>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -49,23 +49,21 @@
         <li class="active"><a href="index.jsp">메인</a></li>
       </ul>
 
-<%
-  if (userId != null) {
-%>
+      <%
+      if (userId != null) {
+      %>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
           aria-expanded="false">회원관리 <span class="caret"></span>
-          </a>
+        </a>
           <ul class="dropdown-menu">
             <li><a href="logoutAction.jsp">로그아웃</a></li>
-          </ul>
-        </li>
+          </ul></li>
       </ul>
 
-<%
-  }
-%>
+      <%
+      }
+      %>
 
     </div>
   </nav>
@@ -108,7 +106,7 @@
   <div class="alert alert-warning" id="warningMessage" style="display: none;">
     <strong>데이터베이스 오류가 발생했습니다.</strong>
   </div>
-<%
+  <%
   String messageType = null;
   if (session.getAttribute("messageType") != null) {
   	messageType = (String) session.getAttribute("messageType");
@@ -120,11 +118,11 @@
   }
 
   if (messageContent != null) {
-%>
+  %>
   <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="vertical-alignment-helper">
       <div class="modal-dialog vertical-align-center">
-        <div class="modal-content <%if (messageType.equals("오류 메시지")) out.println("panel-warning"); else out.println("panel-success");%>">
+        <div class="modal-content <%if (messageType.equals("오류 메시지"))	out.println("panel-warning");else	out.println("panel-success");%>">
           <div class="modal-header panel-heading">
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">&times</span> <span class="sr-only">Close</span>
@@ -143,14 +141,14 @@
       </div>
     </div>
   </div>
-  <script>
+<script>
   $('#messageModal').modal('show');
 </script>
-<%
+  <%
   session.removeAttribute("messageType");
   session.removeAttribute("messageContent");
   }
-%>
+  %>
 </body>
 <script type="text/javascript">
   function autoClosingAlert(selector, delay){
@@ -162,8 +160,8 @@
   }
   
   function submitFunction(){
-    var fromId = '<%= userId %>';
-    var toId = '<%= toId %>';
+    var fromId = '<%=userId%>';
+    var toId = '<%=toId%>';
     var chatContent = $('#chatContent').val();
     console.log(fromId, toId, chatContent);
     $.ajax({
@@ -186,5 +184,67 @@
     });
     $('#chatContent').val('');
   }
+  
+  var lastNo = 0;
+  function chatListFunction(type){
+    var fromId = '<%=userId%>';
+    var toId = '<%=toId%>';
+  
+    $.ajax({
+      type : "post",
+      url : './chatListServlet',
+      data : {
+        fromId : encodeURIComponent(fromId),
+        toId : encodeURIComponent(toId),
+        listType : type
+      },
+      success : function(data) {
+        if (data == "") {
+          return;
+        }
+
+        var parsed = JSON.parse(data);
+        var result = parsed.result;
+
+        for (var i = 0; i < result.length; i++) {
+          addChat(result[i][0].fromId, result[i][2].chatContent,
+              result[i][3].createdDate);
+        }
+
+        lastNo = Number(parsed.last);
+      }
+    });
+  }
+
+  function addChat(chatName, chatContent, chatTime) {
+    $('#chatList')
+        .append(
+            '<div class="row">'
+                + '<div class="col-lg-12">'
+                + '<div class="media">'
+                + '<a class="pull-left" href="#">'
+                + '<img class="media-object img-circle" style="width: 30px; height: 30px;" src="images/icon.png" alf="">'
+                + '</a>' + '<div class="media-body">'
+                + '<h4 class="media-heading">' + chatName
+                + '<span class="small pull-right">' + chatTime + '</span>'
+                + '</h4>'+'<p>'+ chatContent + '</p>' + '</div>' + '</div>' + '</div>' + '</div>'
+                + '<hr>');
+
+  $('#chatList').scrollTop($('#chatList')[0].scrollHeight);
+  }
+  
+  function getInfiniteChat(){
+    setInterval(function(){
+      chatListFunction(lastNo);
+    }, 3000);
+  }
+  
 </script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    chatListFunction('ten');
+    getInfiniteChat();
+  });
+</script>
+
 </html>

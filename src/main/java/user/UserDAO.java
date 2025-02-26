@@ -37,7 +37,7 @@ public class UserDAO {
     try {
       conn = dataSource.getConnection();
       pStmt = conn.prepareStatement(sqlQuery);
-
+      pStmt.setString(1, userId);
       rSet = pStmt.executeQuery();
 
       if (rSet.next()) {

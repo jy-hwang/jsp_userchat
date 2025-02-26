@@ -12,6 +12,20 @@
   if (request.getParameter("toId") != null) {
     toId = (String) request.getParameter("toId");
   }
+  
+  if (userId == null){
+    session.setAttribute("messageType","오류 메시지");
+    session.setAttribute("messageContent","현재 로그인이 되어있지 않습니다.");
+    response.sendRedirect("index.jsp");
+    return;
+  }
+  
+  if (toId == null){
+    session.setAttribute("messageType","오류 메시지");
+    session.setAttribute("messageContent","대화 상대가 지정되지 않았습니다.");
+    response.sendRedirect("index.jsp");
+    return;
+  }
 %>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,27 +50,17 @@
       </ul>
 
 <%
-  if (userId == null) {
+  if (userId != null) {
 %>
-
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-          aria-expanded="false">접속하기 <span class="caret"></span>
-        </a>
-          <ul class="dropdown-menu">
-            <li><a href="login.jsp">로그인</a></li>
-            <li><a href="join.jsp">회원가입</a></li>
-          </ul></li>
-      </ul>
-
-<%
-  } else {
-%>
-
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
           aria-expanded="false">회원관리 <span class="caret"></span>
-        </a></li>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="logoutAction.jsp">로그아웃</a></li>
+          </ul>
+        </li>
       </ul>
 
 <%
@@ -120,7 +124,7 @@
   <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="vertical-alignment-helper">
       <div class="modal-dialog vertical-align-center">
-        <div class="modal-content <%if (messageType.equals("오류메시지")) out.println("panel-warning"); else out.println("panel-success");%>">
+        <div class="modal-content <%if (messageType.equals("오류 메시지")) out.println("panel-warning"); else out.println("panel-success");%>">
           <div class="modal-header panel-heading">
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">&times</span> <span class="sr-only">Close</span>

@@ -77,6 +77,9 @@ if(userId == null){
               aria-expanded="false"
               >회원관리 <span class="caret"></span>
             </a>
+             <ul class="dropdown-menu">
+              <li><a href="logoutAction.jsp">로그아웃</a></li>
+            </ul>
           </li>
         </ul>
 
@@ -104,7 +107,7 @@ if(userId == null){
 <div class="modal fade" id="messageModal" tabindex = "-1" role="dialog" aria-hidden="true">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center">
-      <div class="modal-content <% if(messageType.equals("오류메시지")) out.println("panel-warning"); else out.println("panel-success"); %>">
+      <div class="modal-content <% if(messageType.equals("오류 메시지")) out.println("panel-warning"); else out.println("panel-success"); %>">
         <div class="modal-header panel-heading">
           <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times</span>

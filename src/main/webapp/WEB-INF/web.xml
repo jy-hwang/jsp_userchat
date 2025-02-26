@@ -34,4 +34,14 @@
     <url-pattern>/userRegister</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>ChatSubmitServlet</servlet-name>
+    <servlet-class>chat.ChatSubmitServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChatSubmitServlet</servlet-name>
+    <url-pattern>/chatSubmit</url-pattern>
+  </servlet-mapping>
+  
+  
 </web-app>

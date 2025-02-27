@@ -16,7 +16,7 @@ if (request.getParameter("toId") != null) {
 if (userId == null) {
 	session.setAttribute("messageType", "오류 메시지");
 	session.setAttribute("messageContent", "현재 로그인이 되어있지 않습니다.");
-	response.sendRedirect("index.jsp");
+	response.sendRedirect("login.jsp");
 	return;
 }
 
@@ -208,6 +208,10 @@ if (toId == null) {
         var result = parsed.result;
 
         for (var i = 0; i < result.length; i++) {
+          if(result[i][0].fromId == fromId){
+            result[i][0].fromId = '나';
+          }
+          
           addChat(result[i][0].fromId, result[i][2].chatContent,
               result[i][3].createdDate);
         }

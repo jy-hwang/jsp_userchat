@@ -2,6 +2,9 @@
 pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+<%
+  session.invalidate();
+%>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,9 +12,6 @@ pageEncoding="UTF-8"%>
   </head>
   <body>
   
-<%
-  session.invalidate();
-%>
   <script>
     location.href='index.jsp';
   </script>

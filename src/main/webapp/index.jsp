@@ -2,6 +2,12 @@
 pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+<%
+  String userId = null;
+  if (session.getAttribute("userId") != null){
+    userId = (String) session.getAttribute("userId");
+  }
+%>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,13 +46,7 @@ pageEncoding="UTF-8"%>
     </script>
   </head>
   <body>
-  
-<%
-  String userId = null;
-  if (session.getAttribute("userId") != null){
-    userId = (String) session.getAttribute("userId");
-  }
-%>
+
   
     <nav class="navbar navbar-default">
       <div class="navbar-header">

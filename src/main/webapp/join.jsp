@@ -2,17 +2,6 @@
 pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="css/custom.css" />
-    <title>JSP Ajax 실시간 회원제 채팅 서비스</title>
-    <script src="js/jquery-3.7.1.js"></script>
-    <script src="js/bootstrap.js"></script>
-  </head>
-  <body>
-  
 <%
   String userId = null;
   if (session.getAttribute("userId") != null){
@@ -26,7 +15,16 @@ pageEncoding="UTF-8"%>
     return;
   }
 %>
-  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+    <title>JSP Ajax 실시간 회원제 채팅 서비스</title>
+    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+  </head>
+  <body>
     <nav class="navbar navbar-default">
       <div class="navbar-header">
         <button

@@ -48,6 +48,7 @@ if (toId == null) {
       <ul class="nav navbar-nav">
         <li><a href="index.jsp">메인</a></li>
         <li><a href="find.jsp">친구찾기</a></li>
+        <li><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
       </ul>
 
       <%
@@ -145,11 +146,12 @@ if (toId == null) {
 <script>
   $('#messageModal').modal('show');
 </script>
-  <%
+<%
   session.removeAttribute("messageType");
   session.removeAttribute("messageContent");
   }
-  %>
+%>
+  
 </body>
 <script type="text/javascript">
   function autoClosingAlert(selector, delay){
@@ -244,11 +246,40 @@ if (toId == null) {
     }, 3000);
   }
   
+  function getUnread(){
+    $.ajax({
+      type : "post",
+      url : './chatUnread',
+      data : {
+        userId : encodeURIComponent("<%= userId %>")
+      },
+      success : function(result){
+        if(result > 0){
+          showUnread(result);
+        } else{
+          showUnread('');
+        }
+      }
+    });
+  }
+  
+  function getInfiniteUnread(){
+    setInterval(function(){
+      getUnread();
+    }, 3000);
+  }
+  
+  function showUnread(result){
+    $("#unread").html(result);
+  }
+  
 </script>
 <script type="text/javascript">
   $(document).ready(function(){
     chatListFunction('ten');
     getInfiniteChat();
+    getUnread();
+    getInfiniteUnread();
   });
 </script>
 

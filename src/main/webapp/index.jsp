@@ -160,21 +160,25 @@ if(userId == null){
 <script>
   $('#messageModal').modal('show');
 </script>
+
+<%
+  session.removeAttribute("messageType");
+  session.removeAttribute("messageContent");
+  }
+%>
+
 <%
   if(userId != null){
 %>
 <script type="text/javascript">
   $(function(){
+    getUnread();
     getInfiniteUnread();
   })
 </script>
 <%
   }
 %>
-<%
-  session.removeAttribute("messageType");
-  session.removeAttribute("messageContent");
-  }
-%>
+
   </body>
 </html>

@@ -34,7 +34,7 @@ public class ChatDAO {
     ResultSet rSet = null;
 
     String sqlQuery =
-        " SELECT chat_no AS chatNo, from_id AS fromId, to_id AS toId, chat_content AS chatContent, created_date AS createdDate FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) AND chat_no > ? ORDER BY created_date DESC; ";
+        " SELECT chat_no AS chatNo, from_id AS fromId, to_id AS toId, chat_content AS chatContent, created_date AS createdDate FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) AND chat_no > ? ORDER BY created_date ASC; ";
 
     try {
       conn = dataSource.getConnection();
@@ -105,7 +105,7 @@ public class ChatDAO {
     ResultSet rSet = null;
 
     String sqlQuery =
-        " SELECT chat_no AS chatNo, from_id AS fromId, to_id AS toId, chat_content AS chatContent, created_date AS createdDate FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) AND chat_no > (SELECT MAX(chat_no) - ? FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)))  ORDER BY created_date DESC; ";
+        " SELECT chat_no AS chatNo, from_id AS fromId, to_id AS toId, chat_content AS chatContent, created_date AS createdDate FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) AND chat_no > (SELECT MAX(chat_no) - ? FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)))  ORDER BY created_date ASC; ";
 
     try {
       conn = dataSource.getConnection();

@@ -32,7 +32,7 @@ public class ChatListServlet extends HttpServlet {
       response.getWriter().write(getTen(URLDecoder.decode(fromId, "UTF-8"), URLDecoder.decode(toId, "UTF-8")));
     } else {
       try {
-        response.getWriter().write(getId(URLDecoder.decode(fromId, "UTF-8"), URLDecoder.decode(toId, "UTF-8"), Integer.parseInt(listType)));
+        response.getWriter().write(getNo(URLDecoder.decode(fromId, "UTF-8"), URLDecoder.decode(toId, "UTF-8"), Integer.parseInt(listType)));
       } catch (Exception e) {
         response.getWriter().write("");
       }
@@ -68,7 +68,7 @@ public class ChatListServlet extends HttpServlet {
 
   }
 
-  public String getId(String fromId, String toId, int chatNo) {
+  public String getNo(String fromId, String toId, int chatNo) {
     
     StringBuffer result = new StringBuffer("");
     // {"result":[

@@ -46,6 +46,7 @@ pageEncoding="UTF-8"%>
         <ul class="nav navbar-nav">
           <li><a href="index.jsp">메인</a></li>
           <li class="active"><a href="find.jsp">친구찾기</a></li>
+          <li><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -129,9 +130,23 @@ pageEncoding="UTF-8"%>
 <script>
   $('#messageModal').modal('show');
 </script>
+
 <%
   session.removeAttribute("messageType");
   session.removeAttribute("messageContent");
+  }
+%>
+
+<%
+  if(userId != null){
+%>
+<script type="text/javascript">
+  $(function(){
+    getUnread();
+    getInfiniteUnread();
+  })
+</script>
+<%
   }
 %>
 
@@ -201,6 +216,32 @@ pageEncoding="UTF-8"%>
     $("#friendResult").html('');
   }
 
+  function getUnread(){
+    $.ajax({
+      type : "post",
+      url : './chatUnread',
+      data : {
+        userId : encodeURIComponent("<%= userId %>")
+      },
+      success : function(result){
+        if(result > 0){
+          showUnread(result);
+        } else{
+          showUnread('');
+        }
+      }
+    });
+  }
+  
+  function getInfiniteUnread(){
+    setInterval(function(){
+      getUnread();
+    }, 3000);
+  }
+  
+  function showUnread(result){
+    $("#unread").html(result);
+  }
 </script>
   </body>
 </html>

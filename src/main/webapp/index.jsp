@@ -11,6 +11,33 @@ pageEncoding="UTF-8"%>
     <title>JSP Ajax 실시간 회원제 채팅 서비스</title>
     <script src="js/jquery-3.7.1.js"></script>
     <script src="js/bootstrap.js"></script>
+    <script type="text/javascript">
+      function getUnread(){
+        $.ajax({
+          type : "post",
+          url : './chatUnread',
+          data : {
+            userId : encodeURIComponent("<%= userId %>")
+          },
+          success : function(result){
+            if(result > 0){
+              showUnread(result);
+            } else{
+              showUnread('');
+            }
+          }
+        });
+      }
+      
+      function getInfiniteUnread(){
+        setInterval(function(){
+          getUnread();
+        }, 3000);
+      }
+      function showUnread(result){
+        $("#unread").html(result);
+      }
+    </script>
   </head>
   <body>
   
@@ -40,6 +67,7 @@ pageEncoding="UTF-8"%>
         <ul class="nav navbar-nav">
           <li class="active"><a href="index.jsp">메인</a></li>
           <li><a href="find.jsp">친구찾기</a></li>
+          <li><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
         </ul>
 
 <%
@@ -132,6 +160,17 @@ if(userId == null){
 <script>
   $('#messageModal').modal('show');
 </script>
+<%
+  if(userId != null){
+%>
+<script type="text/javascript">
+  $(function(){
+    getInfiniteUnread();
+  })
+</script>
+<%
+  }
+%>
 <%
   session.removeAttribute("messageType");
   session.removeAttribute("messageContent");

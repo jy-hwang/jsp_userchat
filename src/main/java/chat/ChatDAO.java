@@ -66,8 +66,8 @@ public class ChatDAO {
           timeType = "오후";
           chatTime -= 12;
         }
-        chat.setCreatedDate(
-            tempTime.substring(0, 11) + " " + timeType + " "+ chatTime + ":" + tempTime.substring(14, 16) + "");
+        chat.setCreatedDate(tempTime.substring(0, 11) + " " + timeType + " " + chatTime + ":"
+            + tempTime.substring(14, 16) + "");
         chatList.add(chat);
       }
 
@@ -137,8 +137,8 @@ public class ChatDAO {
           timeType = "오후";
           chatTime -= 12;
         }
-        chat.setCreatedDate(
-            tempTime.substring(0, 11) + " " + timeType + " " + tempTime.substring(14, 16) + "");
+        chat.setCreatedDate(tempTime.substring(0, 11) + " " + timeType + " " + chatTime + ":"
+            + tempTime.substring(14, 16) + "");
         chatList.add(chat);
       }
 

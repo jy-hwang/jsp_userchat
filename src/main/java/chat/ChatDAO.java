@@ -105,7 +105,7 @@ public class ChatDAO {
     ResultSet rSet = null;
 
     String sqlQuery =
-        " SELECT chat_no AS chatNo, from_id AS fromId, to_id AS toId, chat_content AS chatContent, created_date AS createdDate FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) AND chat_no > (SELECT MAX(chat_no) - ? FROM chats)  ORDER BY created_date DESC; ";
+        " SELECT chat_no AS chatNo, from_id AS fromId, to_id AS toId, chat_content AS chatContent, created_date AS createdDate FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)) AND chat_no > (SELECT MAX(chat_no) - ? FROM chats WHERE ((from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?)))  ORDER BY created_date DESC; ";
 
     try {
       conn = dataSource.getConnection();
@@ -116,6 +116,10 @@ public class ChatDAO {
       pStmt.setString(3, toId);
       pStmt.setString(4, fromId);
       pStmt.setInt(5, number);
+      pStmt.setString(6, fromId);
+      pStmt.setString(7, toId);
+      pStmt.setString(8, toId);
+      pStmt.setString(9, fromId);
 
       rSet = pStmt.executeQuery();
 
@@ -211,4 +215,88 @@ public class ChatDAO {
 
   }
 
+  public int readChat(String fromId, String toId) {
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery =
+        " UPDATE chats SET chat_read = 1 where (from_id = ? and to_id = ?) and chat_read = 0; ";
+    try {
+      conn = dataSource.getConnection();
+
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setString(1, toId);
+      pStmt.setString(2, fromId);
+
+      return pStmt.executeUpdate();
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+
+        if (pStmt != null) {
+          pStmt.close();
+        }
+
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+    return -1;
+  }
+
+  public int getAllCountUnreadChat(String userId) {
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery =
+        " SELECT COUNT(chat_no) AS COUNT FROM chats WHERE to_id = ? and chat_read = 0; ";
+    try {
+      conn = dataSource.getConnection();
+
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setString(1, userId);
+
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        return rSet.getInt("COUNT");
+      }
+      return 0;
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+
+        if (pStmt != null) {
+          pStmt.close();
+        }
+
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+    return -1;
+  }
 }

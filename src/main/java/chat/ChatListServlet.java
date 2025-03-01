@@ -46,7 +46,7 @@ public class ChatListServlet extends HttpServlet {
     // {"result":[
     result.append("{\"result\":[");
     ChatDAO chatDAO = new ChatDAO();
-    ArrayList<ChatDTO> chatList = chatDAO.getChatListByRecent(10, fromId, toId);
+    ArrayList<ChatDTO> chatList = chatDAO.getChatListByRecent(100, fromId, toId);
     if (chatList.size() == 0) {
       return "";
     } else {
@@ -62,6 +62,7 @@ public class ChatListServlet extends HttpServlet {
       }
       // ], "last" : ""+ chatList.get(chatList.size() -1).getChatNo() + ""}
       result.append(" ], \"last\" : \"" + chatList.get(chatList.size() - 1).getChatNo() + "\"}");
+      chatDAO.readChat(fromId, toId);
       return result.toString();
     }
 
@@ -89,6 +90,7 @@ public class ChatListServlet extends HttpServlet {
       }
       // ], "last" : ""+ chatList.get(chatList.size() -1).getChatNo() + ""}
       result.append(" ], \"last\" : \"" + chatList.get(chatList.size() - 1).getChatNo() + "\"}");
+      chatDAO.readChat(fromId, toId);
       return result.toString();
     }
     

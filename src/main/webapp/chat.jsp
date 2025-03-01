@@ -174,7 +174,6 @@ if (userId.equals(URLDecoder.decode(toId, "UTF-8"))) {
     var fromId = '<%=userId%>';
     var toId = '<%=toId%>';
     var chatContent = $('#chatContent').val();
-    console.log(fromId, toId, chatContent);
     $.ajax({
       type : "post",
       url : './chatSubmitServlet',

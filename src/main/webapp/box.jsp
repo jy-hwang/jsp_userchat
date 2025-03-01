@@ -76,19 +76,20 @@ pageEncoding="UTF-8"%>
               } else {
                 result[i][1].toId = result[i][0].fromId;
               }
-              addBox(result[i][0].fromId, result[i][1].toId, result[i][2].chatContent, result[i][3].createdDate);
+              addBox(result[i][0].fromId, result[i][1].toId, result[i][2].chatContent, result[i][3].createdDate, result[i][4].unreadCount);
             }
           }
         },
       });
     }
     
-    function addBox(lastId, toId, chatContent, createdDate){
+    function addBox(lastId, toId, chatContent, createdDate, unreadCount){
       console.log('addBox');
       $('#boxTable').append('<tr onclick="location.href=\'chat.jsp?toId=' + encodeURIComponent(toId) + '\'">'
           + '<td  style="width:150px"><h5>' + lastId + '</h5></td>'
           + '<td>'
-          + '<h5>' + chatContent + '</h5>'
+          + '<h5>' + chatContent
+          + '<span class="label label-info">' + unreadCount + '</span></h5>'
           + '<div class="pull-right">' + createdDate +  '</div>'
           + '</td>'
           + '</tr>');

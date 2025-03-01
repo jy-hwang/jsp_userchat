@@ -45,13 +45,21 @@ public class ChatBoxServlet extends HttpServlet {
     if (chatList.size() == 0) {
       return "";
     } else {
-      for (int i = 0; i < chatList.size(); i++) {
+      for (int i = chatList.size() -1 ; i >= 0; i--) {
+        String unreadCount = "";
+        
+        if(userId.equals(chatList.get(i).getToId())) {
+          int unreadCountTemp = chatDAO.getCountUnreadChat(chatList.get(i).getFromId(), userId);
+          unreadCount =  unreadCountTemp > 0 ? Integer.toString(unreadCountTemp) : "";  
+        }
+
         // [{"fromId" : " + chatList.get(i).getFromId() + "},
         result.append("[{\"fromId\" : \"" + chatList.get(i).getFromId() + "\"},");
         result.append("{\"toId\" : \"" + chatList.get(i).getToId() + "\"},");
         result.append("{\"chatContent\" : \"" + chatList.get(i).getChatContent() + "\"},");
-        result.append("{\"createdDate\" : \"" + chatList.get(i).getCreatedDate() + "\"}]");
-        if (i != chatList.size() - 1) {
+        result.append("{\"createdDate\" : \"" + chatList.get(i).getCreatedDate() + "\"},");
+        result.append("{\"unreadCount\" : \"" + unreadCount + "\"}]");
+        if (i != 0) {
           result.append(",");
         }
       }

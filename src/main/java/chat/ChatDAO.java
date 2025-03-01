@@ -300,6 +300,52 @@ public class ChatDAO {
     return -1;
   }
 
+  public int getCountUnreadChat(String fromId, String toId) {
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery =
+        " SELECT COUNT(chat_no) AS COUNT FROM chats WHERE from_id = ? AND to_id = ? AND chat_read = 0; ";
+    try {
+      conn = dataSource.getConnection();
+
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setString(1, fromId);
+      pStmt.setString(2, toId);
+
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        return rSet.getInt("COUNT");
+      }
+      return 0;
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+
+        if (pStmt != null) {
+          pStmt.close();
+        }
+
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+    return -1;
+  }
+
+  
   public ArrayList<ChatDTO> getBox(String userId) {
 
     ArrayList<ChatDTO> chatList = null;

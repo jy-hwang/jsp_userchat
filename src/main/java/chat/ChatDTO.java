@@ -1,7 +1,5 @@
 package chat;
 
-import java.time.format.DateTimeFormatter;
-
 public class ChatDTO {
   private int chatNo;
 

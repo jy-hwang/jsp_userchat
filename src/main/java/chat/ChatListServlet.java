@@ -29,10 +29,12 @@ public class ChatListServlet extends HttpServlet {
         || StringUtils.isEmpty(request.getParameter("listType"))) {
       response.getWriter().write("");
     } else if (listType.equals("ten")) {
-      response.getWriter().write(getTen(URLDecoder.decode(fromId, "UTF-8"), URLDecoder.decode(toId, "UTF-8")));
+      response.getWriter()
+          .write(getTen(URLDecoder.decode(fromId, "UTF-8"), URLDecoder.decode(toId, "UTF-8")));
     } else {
       try {
-        response.getWriter().write(getNo(URLDecoder.decode(fromId, "UTF-8"), URLDecoder.decode(toId, "UTF-8"), Integer.parseInt(listType)));
+        response.getWriter().write(getNo(URLDecoder.decode(fromId, "UTF-8"),
+            URLDecoder.decode(toId, "UTF-8"), Integer.parseInt(listType)));
       } catch (Exception e) {
         response.getWriter().write("");
       }
@@ -69,7 +71,7 @@ public class ChatListServlet extends HttpServlet {
   }
 
   public String getNo(String fromId, String toId, int chatNo) {
-    
+
     StringBuffer result = new StringBuffer("");
     // {"result":[
     result.append("{\"result\":[");
@@ -93,6 +95,7 @@ public class ChatListServlet extends HttpServlet {
       chatDAO.readChat(fromId, toId);
       return result.toString();
     }
-    
+
   }
+  
 }

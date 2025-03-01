@@ -27,11 +27,16 @@ public class ChatSubmitServlet extends HttpServlet {
         || StringUtils.isEmpty(request.getParameter("toId"))
         || StringUtils.isEmpty(request.getParameter("chatContent"))) {
       response.getWriter().write("0");
+      
+    } else if(fromId.equals(toId)) {
+      response.getWriter().write("-1");
+      
     } else {
       fromId = URLDecoder.decode(fromId, "UTF-8");
       toId = URLDecoder.decode(toId, "UTF-8");
       chatContent = URLDecoder.decode(chatContent, "UTF-8");
       response.getWriter().write(new ChatDAO().submit(fromId, toId, chatContent) + "");
+      
     }
 
   }

@@ -345,7 +345,7 @@ public class ChatDAO {
     return -1;
   }
 
-  
+
   public ArrayList<ChatDTO> getBox(String userId) {
 
     ArrayList<ChatDTO> chatList = null;

@@ -28,11 +28,11 @@ public class ChatBoxServlet extends HttpServlet {
     } else {
       try {
         HttpSession session = request.getSession();
-        if(!userId.equals((String) session.getAttribute("userId"))) {
+        if (!userId.equals((String) session.getAttribute("userId"))) {
           response.getWriter().write("");
           return;
         }
-        
+
         userId = URLDecoder.decode(userId, "UTF-8");
         response.getWriter().write(getBox(userId) + "");
 
@@ -52,12 +52,12 @@ public class ChatBoxServlet extends HttpServlet {
     if (chatList.size() == 0) {
       return "";
     } else {
-      for (int i = chatList.size() -1 ; i >= 0; i--) {
+      for (int i = chatList.size() - 1; i >= 0; i--) {
         String unreadCount = "";
-        
-        if(userId.equals(chatList.get(i).getToId())) {
+
+        if (userId.equals(chatList.get(i).getToId())) {
           int unreadCountTemp = chatDAO.getCountUnreadChat(chatList.get(i).getFromId(), userId);
-          unreadCount =  unreadCountTemp > 0 ? Integer.toString(unreadCountTemp) : "";  
+          unreadCount = unreadCountTemp > 0 ? Integer.toString(unreadCountTemp) : "";
         }
 
         // [{"fromId" : " + chatList.get(i).getFromId() + "},
@@ -75,7 +75,7 @@ public class ChatBoxServlet extends HttpServlet {
 
       return result.toString();
     }
-    
+
   }
-  
+
 }

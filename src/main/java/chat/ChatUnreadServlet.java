@@ -26,13 +26,13 @@ public class ChatUnreadServlet extends HttpServlet {
       response.getWriter().write("0");
     } else {
       userId = URLDecoder.decode(userId, "UTF-8");
-      
+
       HttpSession session = request.getSession();
-      if(!userId.equals((String) session.getAttribute("userId"))) {
+      if (!userId.equals((String) session.getAttribute("userId"))) {
         response.getWriter().write("");
         return;
       }
-      
+
       response.getWriter().write(new ChatDAO().getAllCountUnreadChat(userId) + "");
     }
 

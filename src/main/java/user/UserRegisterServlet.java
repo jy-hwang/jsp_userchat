@@ -35,7 +35,7 @@ public class UserRegisterServlet extends HttpServlet {
       response.sendRedirect("join.jsp");
       return;
     }
-    
+
     if (!userPassword1.equals(userPassword2)) {
       request.getSession().setAttribute("messageType", "오류 메시지");
       request.getSession().setAttribute("messageContent", "비밀번호가 일치하지 않습니다.");

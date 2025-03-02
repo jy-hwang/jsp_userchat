@@ -19,7 +19,7 @@ public class UserDTO {
   private String userEmail;
 
   private String userProfile;
-  
+
   private LocalDateTime createdDate;
 
   private LocalDateTime updatedDate;

@@ -24,24 +24,23 @@ public class UserUpdateInfoServlet extends HttpServlet {
     String userGender = request.getParameter("userGender");
     String userEmail = request.getParameter("userEmail");
 
-    if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(userName)
-        || StringUtils.isEmpty(userAge) || StringUtils.isEmpty(userGender)
-        || StringUtils.isEmpty(userEmail)) {
+    if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(userName) || StringUtils.isEmpty(userAge)
+        || StringUtils.isEmpty(userGender) || StringUtils.isEmpty(userEmail)) {
 
       request.getSession().setAttribute("messageType", "오류 메시지");
       request.getSession().setAttribute("messageContent", "모든 내용을 입력하세요");
       response.sendRedirect("updateInfo.jsp");
       return;
     }
-    
+
     HttpSession session = request.getSession();
-    if(!userId.equals((String) session.getAttribute("userId"))) {
+    if (!userId.equals((String) session.getAttribute("userId"))) {
       request.getSession().setAttribute("messageType", "오류 메시지");
       request.getSession().setAttribute("messageContent", "접근할 수 없습니다.");
       response.sendRedirect("index.jsp");
       return;
     }
-    
+
     UserDTO userDTO = new UserDTO();
 
     userDTO.setUserId(userId);

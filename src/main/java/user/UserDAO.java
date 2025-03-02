@@ -68,19 +68,18 @@ public class UserDAO {
 
     return -1;// 데이터베이스 오류
   }
-  
+
   public int registerCheck(String userId) {
 
-    if(userId == null || userId.equals("")) {
+    if (userId == null || userId.equals("")) {
       return 2;
     }
-    
+
     Connection conn = null;
     PreparedStatement pStmt = null;
     ResultSet rSet = null;
 
-    String sqlQuery =
-        " SELECT user_id AS userId FROM users WHERE user_id = ? ";
+    String sqlQuery = " SELECT user_id AS userId FROM users WHERE user_id = ? ";
 
     try {
       conn = dataSource.getConnection();
@@ -89,8 +88,8 @@ public class UserDAO {
       rSet = pStmt.executeQuery();
 
       if (rSet.next() && rSet.getString("userId").equals(userId)) {
-          return 1;// 중복
-        } else {
+        return 1;// 중복
+      } else {
         return 0;// OK
       }
     } catch (Exception e) {
@@ -113,7 +112,7 @@ public class UserDAO {
 
     return -1;// 데이터베이스 오류
   }
-  
+
   public int register(UserDTO userDTO) {
 
     Connection conn = null;
@@ -132,7 +131,7 @@ public class UserDAO {
       pStmt.setInt(4, userDTO.getUserAge());
       pStmt.setString(5, userDTO.getUserGender());
       pStmt.setString(6, userDTO.getUserEmail());
-      
+
       return pStmt.executeUpdate();
 
     } catch (Exception e) {
@@ -152,11 +151,11 @@ public class UserDAO {
 
     return -1;// 데이터베이스 오류
   }
-  
+
   public UserDTO getUser(String userId) {
 
     UserDTO user = new UserDTO();
-    
+
     Connection conn = null;
     PreparedStatement pStmt = null;
     ResultSet rSet = null;
@@ -215,7 +214,7 @@ public class UserDAO {
       pStmt.setString(3, userDTO.getUserGender());
       pStmt.setString(4, userDTO.getUserEmail());
       pStmt.setString(5, userDTO.getUserId());
-      
+
       return pStmt.executeUpdate();
 
     } catch (Exception e) {

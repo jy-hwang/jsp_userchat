@@ -35,11 +35,11 @@ public class ChatListServlet extends HttpServlet {
     } else {
       try {
         HttpSession session = request.getSession();
-        if(!fromId.equals((String) session.getAttribute("userId"))) {
+        if (!fromId.equals((String) session.getAttribute("userId"))) {
           response.getWriter().write("");
           return;
         }
-        
+
         response.getWriter().write(getNo(URLDecoder.decode(fromId, "UTF-8"),
             URLDecoder.decode(toId, "UTF-8"), Integer.parseInt(listType)));
       } catch (Exception e) {
@@ -104,5 +104,5 @@ public class ChatListServlet extends HttpServlet {
     }
 
   }
-  
+
 }

@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-<%@ page import="user.UserDTO" %>
-<%@ page import="user.UserDAO" %>
-
 <!DOCTYPE html>
 <html>
 <%
@@ -10,15 +7,6 @@ pageEncoding="UTF-8"%>
   if (session.getAttribute("userId") != null){
     userId = (String) session.getAttribute("userId");
   }
-  
-  if (userId == null) {
-    session.setAttribute("messageType", "오류 메시지");
-    session.setAttribute("messageContent", "현재 로그인이 되어있지 않습니다.");
-    response.sendRedirect("login.jsp");
-    return;
-  }
-  
-  UserDTO user = new UserDAO().getUser(userId);
 %>
   <head>
     <meta charset="UTF-8" />
@@ -80,8 +68,34 @@ pageEncoding="UTF-8"%>
           <li><a href="index.jsp">메인</a></li>
           <li><a href="find.jsp">친구찾기</a></li>
           <li><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
-          <li><a href="boardList.jsp">자유게시판</a></li>
+          <li class="active"><a href="boardList.jsp">자유게시판</a></li>
         </ul>
+
+<%
+if(userId == null){
+%>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown"
+            ><a
+              href="#"
+              class="dropdown-toggle"
+              data-toggle="dropdown"
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              >접속하기 <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="login.jsp">로그인</a></li>
+              <li><a href="join.jsp">회원가입</a></li>
+            </ul>
+          </li>
+        </ul>
+
+<%
+} else {
+%>
 
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown"
@@ -95,64 +109,46 @@ pageEncoding="UTF-8"%>
               >회원관리 <span class="caret"></span>
             </a>
              <ul class="dropdown-menu">
-              <li class="active"><a href="updateInfo.jsp">회원정보수정</a></li>
-              <li><a href="updateProfile.jsp">프로필 수정</a></li>
-              <li><a href="logoutAction.jsp">로그아웃</a></li>
+               <li><a href="updateInfo.jsp">회원정보수정</a></li>
+               <li><a href="updateProfile.jsp">프로필 수정</a></li>
+               <li><a href="logoutAction.jsp">로그아웃</a></li>
             </ul>
           </li>
         </ul>
+
+<%
+}
+%>
+
       </div>
     </nav>
     <div class="container">
-      <form method="post" action="./userUpdateInfo">
-        <table class="table table-borderd table-hover" style="text-align: center; border: 1px solid #ddd">
-          <thead>
+      <table class="table table-bordered table-hover" style="text-align: center; border: 1px solid #ddd">
+        <thead>
           <tr>
-            <th colspan ="2" ><h4>회원 정보 수정 양식</h4></th>
+            <th colspan="5"><h4>자유 게시판</h4></th>
           </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="width: 110px;"><h5>아이디</h5></td>
-              <td><h5><%= user.getUserId() %></h5>
-              <input type="hidden" name="userId" value="<%= user.getUserId() %>"/></td>
-            </tr>
-            <tr>
-              <td style="width: 110px;"><h5>이름</h5></td>
-              <td colspan="2"><input class="form-control" type="text" id="userName" name="userName" maxlength="20" placeholder="이름을 입력하세요" value= "<%= user.getUserName() %>"/></td>
-            </tr>
-            <tr>
-              <td style="width: 110px;"><h5>나이</h5></td>
-              <td colspan="2"><input class="form-control" type="number" id="userAge" name="userAge" maxlength="20" placeholder="나이를 입력하세요"  value= "<%= user.getUserAge() %>"/></td>
-            </tr>
-            <tr>
-              <td style="width: 110px;"><h5>성별</h5></td>
-              <td colspan="2">
-                <div class="form-group" style="text-align:center; margin: 0 auto;">
-                  <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-primary <% if(user.getUserGender().equals("M")) out.print("active"); %>">
-                      <input type="radio" name="userGender" autocomplete="off" value="M" <% if(user.getUserGender().equals("M")) out.print("checked"); %>>남자
-                    </label>
-                    <label class="btn btn-primary <% if(user.getUserGender().equals("F")) out.print("active"); %>">
-                      <input type="radio" name="userGender" autocomplete="off" value="F" <% if(user.getUserGender().equals("F")) out.print("checked"); %>>여자
-                    </label>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 110px;"><h5>이메일</h5></td>
-              <td colspan="2"><input class="form-control" type="email" id="userEmail" name="userEmail" maxlength="20" placeholder="이메일을 입력하세요"  value= "<%= user.getUserEmail() %>"/></td>
-            </tr>
-             <tr>
-              <td style="text-align:left;" colspan="3"><h5 style="color:red;"></h5>
-              <input class="btn btn-primary pull-right" type="submit" value="수정"/>
-              </td>
-            </tr>
-          </tbody>
-        
-        </table>
-      </form>
+          <tr>
+            <th style="background-color: #fafafa; color: #000; width: 70px"><h5>번호</h5></th>
+            <th style="background-color: #fafafa; color: #000"><h5>제목</h5></th>
+            <th style="background-color: #fafafa; color: #000"><h5>작성자</h5></th>
+            <th style="background-color: #fafafa; color: #000; width: 100px"><h5>작성일자</h5></th>
+            <th style="background-color: #fafafa; color: #000; width: 70px"><h5>조회수</h5></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>안녕하세요</td>
+            <td>홍길동</td>
+            <td>2025-03-02</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td colspan="5"><a href="boardWrite.jsp" class="btn btn-primary pull-right" type="submit">글쓰기</a></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 <%
   String messageType = null;

@@ -39,6 +39,7 @@
         <li><a href="index.jsp">메인</a></li>
         <li class="active"><a href="find.jsp">친구찾기</a></li>
         <li><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
+        <li><a href="boardList.jsp">자유게시판</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -169,7 +170,7 @@
           $('#checkType').attr('class','modal-content panel-warning');
           failFriend();
         }else {
-          $('#checkMessage').html('친구 찾기에 성공했습니다..');
+          $('#checkMessage').html('친구 찾기에 성공했습니다.');
           $('#checkType').attr('class','modal-content panel-success');
           var data = JSON.parse(result);
           var profile = data.userProfile;

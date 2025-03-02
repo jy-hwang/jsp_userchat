@@ -97,10 +97,9 @@ pageEncoding="UTF-8"%>
     }
     
     function getInfiniteBox(){
-     setInterval(function(){
+      setInterval(function(){
        chatBoxFunction();
-     }, 3000);
-      
+      }, 3000);
     }
     
   </script>
@@ -128,6 +127,7 @@ pageEncoding="UTF-8"%>
           <li><a href="index.jsp">메인</a></li>
           <li><a href="find.jsp">친구찾기</a></li>
           <li class="active"><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
+          <li><a href="boardList.jsp">자유게시판</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">

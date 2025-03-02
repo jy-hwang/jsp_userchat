@@ -143,7 +143,7 @@ pageEncoding="UTF-8"%>
   if(userId.equals(board.getUserId())){
 %>
               <a href="boardUpdate.jsp?boardNo=<%= board.getBoardNo() %>" class="btn btn-primary">수정</a>
-              <a href="boardDelete.jsp?boardNo=<%= board.getBoardNo() %>" class="btn btn-primary">삭제</a>
+              <a href="boardDelete?boardNo=<%= board.getBoardNo() %>" class="btn btn-warning" onclick="return confirm('정말로 삭제하시겠습니까?')">삭제</a>
 <%
   }
 %>

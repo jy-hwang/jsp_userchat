@@ -84,6 +84,7 @@ public class BoardDAO {
       rSet = pStmt.executeQuery();
 
       if (rSet.next()) {
+        board.setBoardNo(rSet.getInt("boardNo"));
         board.setUserId(rSet.getString("userId"));
         board.setBoardTitle(rSet.getString("boardTitle").replaceAll(" ", "&nbsp;")
             .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
@@ -96,7 +97,9 @@ public class BoardDAO {
         board.setBoardSequence(rSet.getInt("boardSequence"));
         board.setBoardLevel(rSet.getInt("boardLevel"));
         board.setCreatedDate(rSet.getString("createdDate").substring(0, 11));
-        board.setUpdatedDate(rSet.getString("updatedDate").substring(0, 11));
+        if (rSet.getString("updatedDate") != null) {
+          board.setUpdatedDate(rSet.getString("updatedDate").substring(0, 11));
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -143,7 +146,7 @@ public class BoardDAO {
         board.setBoardTitle(rSet.getString("boardTitle").replaceAll(" ", "&nbsp;")
             .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
         board.setCreatedDate(rSet.getString("createdDate").substring(0, 11));
-        if(rSet.getString("updatedDate") != null){
+        if (rSet.getString("updatedDate") != null) {
           board.setUpdatedDate(rSet.getString("updatedDate").substring(0, 11));
         }
         board.setBoardHit(rSet.getInt("boardHit"));
@@ -169,4 +172,118 @@ public class BoardDAO {
 
     return boardList;
   }
+
+  public int hit(int boardNo) {
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+
+    String sqlQuery = " UPDATE boards SET board_hit = board_hit + 1 WHERE board_no = ? ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+
+      pStmt.setInt(1, boardNo);
+
+      return pStmt.executeUpdate();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return -1;// 데이터베이스 오류
+  }
+
+  public String getFile(int boardNo) {
+
+    BoardDTO board = new BoardDTO();
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery = " SELECT board_file AS boardFile FROM boards WHERE board_no = ? ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setInt(1, boardNo);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        return rSet.getString("boardFile");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return "";
+  }
+
+  public String getRealFile(int boardNo) {
+
+    BoardDTO board = new BoardDTO();
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery = " SELECT board_real_file AS boardRealFile FROM boards WHERE board_no = ? ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setInt(1, boardNo);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        return rSet.getString("boardRealFile");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return "";
+  }
+
 }

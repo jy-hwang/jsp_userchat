@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-<%@ page import="user.UserDTO" %>
-<%@ page import="user.UserDAO" %>
-
 <!DOCTYPE html>
 <html>
 <%
@@ -17,8 +14,6 @@ pageEncoding="UTF-8"%>
     response.sendRedirect("login.jsp");
     return;
   }
-  
-  UserDTO user = new UserDAO().getUser(userId);
 %>
   <head>
     <meta charset="UTF-8" />
@@ -80,7 +75,7 @@ pageEncoding="UTF-8"%>
           <li><a href="index.jsp">메인</a></li>
           <li><a href="find.jsp">친구찾기</a></li>
           <li><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
-          <li class="active"><a href="boardList.jsp">자유게시판</a></li>
+          <li><a href="boardList.jsp">자유게시판</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -96,55 +91,44 @@ pageEncoding="UTF-8"%>
             </a>
              <ul class="dropdown-menu">
               <li><a href="updateInfo.jsp">회원정보수정</a></li>
-              <li><a href="updatePassword.jsp">비밀번호 변경</a></li>
+              <li class="active"><a href="updatePassword.jsp">비밀번호 변경</a></li>
               <li><a href="updateProfile.jsp">프로필 수정</a></li>
               <li><a href="logoutAction.jsp">로그아웃</a></li>
             </ul>
           </li>
         </ul>
+
       </div>
     </nav>
     <div class="container">
-      <form method="post" action="./boardWrite" enctype="multipart/form-data">
+      <form method="post" action="./userUpdatePassword">
         <table class="table table-borderd table-hover" style="text-align: center; border: 1px solid #ddd">
           <thead>
           <tr>
-            <th colspan ="3" ><h4>게시물 작성 양식</h4></th>
+            <th colspan ="2" ><h4>비밀번호 변경 양식</h4></th>
           </tr>
           </thead>
           <tbody>
             <tr>
-              <td style="width: 110px;"><h5>아이디</h5></td>
-              <td><h5><%= user.getUserId() %></h5>
-              <input type="hidden" name="userId" value="<%= user.getUserId() %>"/></td>
+              <td class="w-220 text-align-right"><h5>아이디</h5></td>
+              <td><h5 class="text-align-left"><%= userId %></h5>
+              <input type="hidden" name="userId" value="<%= userId %>"/></td>
             </tr>
-            
             <tr>
-              <td style="width: 110px;"><h5>글 제목</h5></td>
-              <td><input class="form-control" type="text" name="boardTitle" placeholder="글 제목을 입력하세요." maxlength="50"/></td>
+              <td class="w-220 text-align-right"><h5>현재 비밀번호</h5></td>
+              <td colspan="2"><input class="form-control" type="password" id="oldPassword" name="oldPassword" maxlength="20" placeholder="현재 비밀번호를 입력하세요" required /></td>
             </tr>
-            
             <tr>
-              <td style="width: 110px;"><h5>글 내용</h5></td>
-              <td><textarea class="form-control" name="boardContent" placeholder="글 내용을 입력하세요." rows="10" maxlength="2048"></textarea></td>
+              <td class="w-220 text-align-right"><h5>새로운 비밀번호</h5></td>
+              <td colspan="2"><input onkeyup="passwordCheckFunction();" class="form-control" type="password" id="newPassword1" name="newPassword1" maxlength="20" placeholder="새로운 비밀번호를 입력하세요" required/></td>
             </tr>
-           
             <tr>
-              <td style="width: 110px;"><h5>파일 업로드</h5></td>
-              <td colspan="2">
-                <input type="file" name="boardFile" class="file">
-                <div class="input-group col-xs-12">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
-                  <input type="text" class="form-control input-lg" disabled placeholder="파일을 업로드하세요.">
-                  <span class="input-group-btn">
-                    <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i>파일 찾기</button>
-                  </span>
-                </div>
-              </td>
+              <td class="w-220 text-align-right"><h5>새로운 비밀번호확인</h5></td>
+              <td colspan="2"><input onkeyup="passwordCheckFunction();" class="form-control" type="password" id="newPassword2" name="newPassword2" maxlength="20" placeholder="새로운 비밀번호 확인을 입력하세요" required/></td>
             </tr>
-             <tr>
-              <td style="text-align:left;" colspan="3"><h5 style="color:red;"></h5>
-              <input class="btn btn-primary pull-right" type="submit" value="등록"/>
+            <tr>
+              <td class="text-align-left" colspan="3"><h5 style="color:red;" id="passwordCheckMessage"></h5>
+              <input class="btn btn-primary pull-right" type="submit" value="수정"/>
               </td>
             </tr>
           </tbody>
@@ -207,19 +191,23 @@ pageEncoding="UTF-8"%>
     getUnread();
     getInfiniteUnread();
   })
+  
+  function passwordCheckFunction(){
+    var newPassword1 = $('#newPassword1').val();
+    var newPassword2 = $('#newPassword2').val();
+    
+    if(newPassword1 != newPassword2){
+      $('#passwordCheckMessage').html('비밀번호가 서로 일치하지 않습니다.');
+    } else {
+      $('#passwordCheckMessage').html('');
+    } 
+  }
 </script>
 <%
   }
 %>
 <script type="text/javascript">
- $(document).on('click','.browse', function(){
-  var file = $(this).parent().parent().parent().find('.file');
-  file.trigger('click');
- });
- 
- $(document).on('change','.file',function(){
-  $(this).parent().find('.form-control').val($(this).val().replace(/c:\\fakepath\\/i,'')); 
- });
+  
 </script>
   </body>
 </html>

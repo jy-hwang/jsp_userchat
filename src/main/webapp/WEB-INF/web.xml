@@ -57,6 +57,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>UserUpdatePasswordServlet</servlet-name>
+    <servlet-class>user.UserUpdatePasswordServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserUpdatePasswordServlet</servlet-name>
+    <url-pattern>/userUpdatePassword</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>UserUpdateProfileServlet</servlet-name>
     <servlet-class>user.UserUpdateProfileServlet</servlet-class>
   </servlet>

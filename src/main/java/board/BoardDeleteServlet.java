@@ -28,11 +28,11 @@ public class BoardDeleteServlet extends HttpServlet {
     String userId = (String) session.getAttribute("userId");
 
     String tempBoardNo = request.getParameter("boardNo");
-    if(StringUtils.isEmpty(tempBoardNo)){
+    if (StringUtils.isEmpty(tempBoardNo)) {
       session.setAttribute("messageType", "오류 메시지");
       session.setAttribute("messageContent", "게시물을 선택해주세요.");
       response.sendRedirect("index.jsp");
-      return;    
+      return;
     }
     int boardNo = Integer.parseInt(tempBoardNo);
 

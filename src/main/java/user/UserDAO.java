@@ -270,6 +270,42 @@ public class UserDAO {
     return -1;// 데이터베이스 오류
   }
 
+  public int updatePassword(String userId, String oldPassword, String newPassword) {
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+
+    String sqlQuery =
+        " UPDATE users SET user_password = ?, updated_date = current_timestamp WHERE user_id = ? and user_password = ?; ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+
+      pStmt.setString(1, newPassword);
+      pStmt.setString(2, userId);
+      pStmt.setString(3, oldPassword);
+
+      return pStmt.executeUpdate();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return -1;// 데이터베이스 오류
+  }
+
   public String getUserProfile(String userId) {
 
     UserDTO user = new UserDTO();
@@ -312,6 +348,46 @@ public class UserDAO {
     }
 
     return "images/icon.png";
+  }
+
+  public String getPassword(String userId) {
+
+    UserDTO user = new UserDTO();
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery = " SELECT user_password AS userPassword FROM users WHERE user_id = ? ";
+    String oldPassword = "";
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setString(1, userId);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        oldPassword = rSet.getString("userPassword");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return oldPassword;
   }
 
 

@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-import chat.ChatDTO;
-import user.UserDTO;
 
 public class BoardDAO {
 
@@ -323,7 +321,7 @@ public class BoardDAO {
 
     return -1;// 데이터베이스 오류
   }
-  
+
   public int deleteArticle(int boardNo) {
 
     Connection conn = null;
@@ -357,5 +355,5 @@ public class BoardDAO {
 
     return -1;// 데이터베이스 오류
   }
-  
+
 }

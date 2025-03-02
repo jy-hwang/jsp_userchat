@@ -65,7 +65,7 @@ public class BoardDAO {
 
     return -1;// 데이터베이스 오류
   }
-  
+
   public BoardDTO getOne(int boardNo) {
 
     BoardDTO board = new BoardDTO();
@@ -85,10 +85,10 @@ public class BoardDAO {
 
       if (rSet.next()) {
         board.setUserId(rSet.getString("userId"));
-        board.setBoardTitle(rSet.getString("boardTitle").replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
-        board.setBoardContent(rSet.getString("boardContent").replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
+        board.setBoardTitle(rSet.getString("boardTitle").replaceAll(" ", "&nbsp;")
+            .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
+        board.setBoardContent(rSet.getString("boardContent").replaceAll(" ", "&nbsp;")
+            .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
         board.setBoardHit(rSet.getInt("boardHit"));
         board.setBoardFile(rSet.getString("boardFile"));
         board.setBoardRealFile(rSet.getString("boardRealFile"));
@@ -118,5 +118,55 @@ public class BoardDAO {
 
     return board;
   }
-  
+
+  public ArrayList<BoardDTO> getList() {
+
+    ArrayList<BoardDTO> boardList = null;
+
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery =
+        " SELECT board_no AS boardNo, user_id AS userId, board_title AS boardTitle, board_hit AS boardHit, created_date AS createdDate, updated_date AS updatedDate FROM boards ORDER BY board_group DESC, board_sequence ASC ";
+    boardList = new ArrayList<BoardDTO>();
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+      rSet = pStmt.executeQuery();
+
+      while (rSet.next()) {
+        BoardDTO board = new BoardDTO();
+        board.setBoardNo(rSet.getInt("boardNo"));
+        board.setUserId(rSet.getString("userId"));
+        board.setBoardTitle(rSet.getString("boardTitle").replaceAll(" ", "&nbsp;")
+            .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
+        board.setCreatedDate(rSet.getString("createdDate").substring(0, 11));
+        if(rSet.getString("updatedDate") != null){
+          board.setUpdatedDate(rSet.getString("updatedDate").substring(0, 11));
+        }
+        board.setBoardHit(rSet.getInt("boardHit"));
+        boardList.add(board);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return boardList;
+  }
 }

@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import util.StringUtils;
 
 @WebServlet("/chatSubmitServlet")
@@ -34,6 +35,13 @@ public class ChatSubmitServlet extends HttpServlet {
     } else {
       fromId = URLDecoder.decode(fromId, "UTF-8");
       toId = URLDecoder.decode(toId, "UTF-8");
+      
+      HttpSession session = request.getSession();
+      if(!fromId.equals((String) session.getAttribute("userId"))) {
+        response.getWriter().write("");
+        return;
+      }
+      
       chatContent = URLDecoder.decode(chatContent, "UTF-8");
       response.getWriter().write(new ChatDAO().submit(fromId, toId, chatContent) + "");
       

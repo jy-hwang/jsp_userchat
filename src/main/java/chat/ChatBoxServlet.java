@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import util.StringUtils;
 
 @WebServlet("/chatBoxServlet")
@@ -26,6 +27,12 @@ public class ChatBoxServlet extends HttpServlet {
       response.getWriter().write("");
     } else {
       try {
+        HttpSession session = request.getSession();
+        if(!userId.equals((String) session.getAttribute("userId"))) {
+          response.getWriter().write("");
+          return;
+        }
+        
         userId = URLDecoder.decode(userId, "UTF-8");
         response.getWriter().write(getBox(userId) + "");
 

@@ -45,6 +45,15 @@
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>UserUpdateInfoServlet</servlet-name>
+    <servlet-class>user.UserUpdateInfoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserUpdateInfoServlet</servlet-name>
+    <url-pattern>/userUpdateInfo</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>ChatSubmitServlet</servlet-name>
     <servlet-class>chat.ChatSubmitServlet</servlet-class>
   </servlet>

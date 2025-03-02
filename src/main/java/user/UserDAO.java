@@ -152,4 +152,88 @@ public class UserDAO {
 
     return -1;// 데이터베이스 오류
   }
+  
+  public UserDTO getUser(String userId) {
+
+    UserDTO user = new UserDTO();
+    
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery =
+        " SELECT user_id AS userId, user_name AS userName, user_age AS userAge, user_gender AS userGender, user_email AS userEmail FROM users WHERE user_id = ? ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setString(1, userId);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        user.setUserId(userId);
+        user.setUserName(rSet.getString("userName"));
+        user.setUserAge(rSet.getInt("userAge"));
+        user.setUserGender(rSet.getString("userGender"));
+        user.setUserEmail(rSet.getString("userEmail"));
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return user;
+  }
+
+  public int updateInfo(UserDTO userDTO) {
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+
+    String sqlQuery =
+        " UPDATE users SET user_name = ?, user_age = ?, user_gender = ?, user_email = ?, updated_date = current_timestamp WHERE user_id = ?; ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+
+      pStmt.setString(1, userDTO.getUserName());
+      pStmt.setInt(2, userDTO.getUserAge());
+      pStmt.setString(3, userDTO.getUserGender());
+      pStmt.setString(4, userDTO.getUserEmail());
+      pStmt.setString(5, userDTO.getUserId());
+      
+      return pStmt.executeUpdate();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return -1;// 데이터베이스 오류
+  }
+
 }

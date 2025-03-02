@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@ page import="user.UserDTO" %>
+<%@ page import="user.UserDAO" %>
+
 <!DOCTYPE html>
 <html>
 <%
@@ -15,6 +18,7 @@ pageEncoding="UTF-8"%>
     return;
   }
   
+  UserDTO user = new UserDAO().getUser(userId);
 %>
   <head>
     <meta charset="UTF-8" />
@@ -25,84 +29,33 @@ pageEncoding="UTF-8"%>
     <title>JSP Ajax 실시간 회원제 채팅 서비스</title>
     <script src="js/jquery-3.7.1.js"></script>
     <script src="js/bootstrap.js"></script>
-      <script type="text/javascript">
-    function getUnread() {
-      $.ajax({
-        type: "post",
-        url: "./chatUnread",
-        data: {
-          userId: encodeURIComponent("<%= userId %>"),
-        },
-        success: function (result) {
-          if (result > 0) {
-            showUnread(result);
-          } else {
-            showUnread("");
-          }
-        },
-      });
-    }
-
-    function getInfiniteUnread() {
-      setInterval(function () {
-        getUnread();
-      }, 3000);
-    }
-
-    function showUnread(result) {
-      $("#unread").html(result);
-    }
-
-    function chatBoxFunction() {
-      var userId = "<%= userId %>";
-      $.ajax({
-        type: "post",
-        url: "./chatBox",
-        data: {
-          userId: encodeURIComponent(userId),
-        },
-        success: function (data) {
-          if (data == "") {
-            return;
-          } else {
-            $("#boxTable").html("");
-            var parsed = JSON.parse(data);
-            var result = parsed.result;
-
-            for (var i = 0; i < result.length; i++) {
-             
-              if (result[i][0].fromId == userId) {
-                result[i][0].fromId = result[i][1].toId;
-              } else {
-                result[i][1].toId = result[i][0].fromId;
-              }
-              addBox(result[i][0].fromId, result[i][1].toId, result[i][2].chatContent, result[i][3].createdDate, result[i][4].unreadCount);
+    <script type="text/javascript">
+      function getUnread(){
+        $.ajax({
+          type : "post",
+          url : './chatUnread',
+          data : {
+            userId : encodeURIComponent("<%= userId %>")
+          },
+          success : function(result){
+            if(result > 0){
+              showUnread(result);
+            } else{
+              showUnread('');
             }
           }
-        },
-      });
-    }
-    
-    function addBox(lastId, toId, chatContent, createdDate, unreadCount){
-      console.log('addBox');
-      $('#boxTable').append('<tr onclick="location.href=\'chat.jsp?toId=' + encodeURIComponent(toId) + '\'">'
-          + '<td  style="width:150px"><h5>' + lastId + '</h5></td>'
-          + '<td>'
-          + '<h5>' + chatContent
-          + '<span class="label label-info">' + unreadCount + '</span></h5>'
-          + '<div class="pull-right">' + createdDate +  '</div>'
-          + '</td>'
-          + '</tr>');
-    }
-    
-    function getInfiniteBox(){
-     setInterval(function(){
-       chatBoxFunction();
-     }, 3000);
+        });
+      }
       
-    }
-    
-  </script>
+      function getInfiniteUnread(){
+        setInterval(function(){
+          getUnread();
+        }, 3000);
+      }
+      function showUnread(result){
+        $("#unread").html(result);
+      }
+    </script>
   </head>
   <body>
 
@@ -126,7 +79,7 @@ pageEncoding="UTF-8"%>
         <ul class="nav navbar-nav">
           <li><a href="index.jsp">메인</a></li>
           <li><a href="find.jsp">친구찾기</a></li>
-          <li class="active"><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
+          <li><a href="box.jsp">메시지함<span id="unread" class="label label-info"></span></a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -141,31 +94,63 @@ pageEncoding="UTF-8"%>
               >회원관리 <span class="caret"></span>
             </a>
              <ul class="dropdown-menu">
-               <li><a href="updateInfo.jsp">회원정보수정</a></li>
-               <li><a href="logoutAction.jsp">로그아웃</a></li>
+              <li class="active"><a href="updateInfo.jsp">회원정보수정</a></li>
+              <li><a href="logoutAction.jsp">로그아웃</a></li>
             </ul>
           </li>
         </ul>
       </div>
     </nav>
     <div class="container">
-      <table class="table" style="margin: 0 auto;">
-        <thead>
+      <form method="post" action="./userUpdateInfo">
+        <table class="table table-borderd table-hover" style="text-align: center; border: 1px solid #ddd">
+          <thead>
+          <tr>
+            <th colspan ="2" ><h4>회원 정보 수정 양식</h4></th>
+          </tr>
+          </thead>
+          <tbody>
             <tr>
-            <th><h4>주고받은 메시지 목록</h4></th>      
+              <td style="width: 110px;"><h5>아이디</h5></td>
+              <td><h5><%= user.getUserId() %></h5>
+              <input type="hidden" name="userId" value="<%= user.getUserId() %>"/></td>
             </tr>
-          
+            <tr>
+              <td style="width: 110px;"><h5>이름</h5></td>
+              <td colspan="2"><input class="form-control" type="text" id="userName" name="userName" maxlength="20" placeholder="이름을 입력하세요" value= "<%= user.getUserName() %>"/></td>
+            </tr>
+            <tr>
+              <td style="width: 110px;"><h5>나이</h5></td>
+              <td colspan="2"><input class="form-control" type="number" id="userAge" name="userAge" maxlength="20" placeholder="나이를 입력하세요"  value= "<%= user.getUserAge() %>"/></td>
+            </tr>
+            <tr>
+              <td style="width: 110px;"><h5>성별</h5></td>
+              <td colspan="2">
+                <div class="form-group" style="text-align:center; margin: 0 auto;">
+                  <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary <% if(user.getUserGender().equals("M")) out.print("active"); %>">
+                      <input type="radio" name="userGender" autocomplete="off" value="M" <% if(user.getUserGender().equals("M")) out.print("checked"); %>>남자
+                    </label>
+                    <label class="btn btn-primary <% if(user.getUserGender().equals("F")) out.print("active"); %>">
+                      <input type="radio" name="userGender" autocomplete="off" value="F" <% if(user.getUserGender().equals("F")) out.print("checked"); %>>여자
+                    </label>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="width: 110px;"><h5>이메일</h5></td>
+              <td colspan="2"><input class="form-control" type="email" id="userEmail" name="userEmail" maxlength="20" placeholder="이메일을 입력하세요"  value= "<%= user.getUserEmail() %>"/></td>
+            </tr>
+             <tr>
+              <td style="text-align:left;" colspan="3"><h5 style="color:red;"></h5>
+              <input class="btn btn-primary pull-right" type="submit" value="수정"/>
+              </td>
+            </tr>
+          </tbody>
         
-        </thead>
-        <div style="overflow-y : auto; width: 100%; max-height: 450px;">
-          <table class="table table-bordered table-hover" style="text-align: center; border: 1px solid #ddd;">
-            <tbody id="boxTable">
-            
-            </tbody>
-          </table>
-        </div>
-      </table>
-      </table>
+        </table>
+      </form>
     </div>
 <%
   String messageType = null;
@@ -221,8 +206,6 @@ pageEncoding="UTF-8"%>
   $(function(){
     getUnread();
     getInfiniteUnread();
-    chatBoxFunction();
-    getInfiniteBox();
   })
 </script>
 <%

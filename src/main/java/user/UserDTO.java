@@ -18,6 +18,8 @@ public class UserDTO {
 
   private String userEmail;
 
+  private String userProfile;
+  
   private LocalDateTime createdDate;
 
   private LocalDateTime updatedDate;
@@ -76,6 +78,14 @@ public class UserDTO {
 
   public void setUserEmail(String userEmail) {
     this.userEmail = userEmail;
+  }
+
+  public String getUserProfile() {
+    return userProfile;
+  }
+
+  public void setUserProfile(String userProfile) {
+    this.userProfile = userProfile;
   }
 
   public LocalDateTime getCreatedDate() {

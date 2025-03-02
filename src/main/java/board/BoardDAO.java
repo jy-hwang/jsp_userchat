@@ -286,4 +286,42 @@ public class BoardDAO {
     return "";
   }
 
+
+  public int updateArticle(BoardDTO boardDTO) {
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+
+    String sqlQuery =
+        " UPDATE boards SET board_title = ?, board_content = ?, board_file = ?, board_real_file = ?, updated_date = current_timestamp WHERE board_no = ? ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+
+      pStmt.setString(1, boardDTO.getBoardTitle());
+      pStmt.setString(2, boardDTO.getBoardContent());
+      pStmt.setString(3, boardDTO.getBoardFile());
+      pStmt.setString(4, boardDTO.getBoardRealFile());
+      pStmt.setInt(5, boardDTO.getBoardNo());
+
+      return pStmt.executeUpdate();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return -1;// 데이터베이스 오류
+  }
 }

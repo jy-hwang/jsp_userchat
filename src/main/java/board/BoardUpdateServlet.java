@@ -12,8 +12,8 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import utils.StringUtils;
 
-@WebServlet("/boardWriteServlet")
-public class BoardWriteServlet extends HttpServlet {
+@WebServlet("/boardUpdateServlet")
+public class BoardUpdateServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,12 +43,27 @@ public class BoardWriteServlet extends HttpServlet {
       response.sendRedirect("index.jsp");
       return;
     }
+    int boardNo = Integer.parseInt(multi.getParameter("boardNo"));
+    if (boardNo == 0) {
+      request.getSession().setAttribute("messageType", "오류 메시지");
+      request.getSession().setAttribute("messageContent", "접근할 수 없습니다.");
+      response.sendRedirect("index.jsp");
+      return;
+    }
+    BoardDAO boardDAO = new BoardDAO();
+    BoardDTO original = boardDAO.getOne(boardNo);
+    if (!userId.equals(original.getUserId())) {
+      request.getSession().setAttribute("messageType", "오류 메시지");
+      request.getSession().setAttribute("messageContent", "접근할 수 없습니다.");
+      response.sendRedirect("boardList.jsp");
+      return;
+    }
     String boardTitle = multi.getParameter("boardTitle");
     String boardContent = multi.getParameter("boardContent");
     if (StringUtils.isEmpty(boardTitle) || StringUtils.isEmpty(boardContent)) {
       request.getSession().setAttribute("messageType", "오류 메시지");
       request.getSession().setAttribute("messageContent", "내용을 모두 채워주세요.");
-      response.sendRedirect("boardList.jsp");
+      response.sendRedirect("index.jsp");
       return;
     }
 
@@ -60,19 +75,28 @@ public class BoardWriteServlet extends HttpServlet {
     if (file != null) {
       boardFile = multi.getOriginalFileName("boardFile");
       boardRealFile = file.getName();
+      String prev = original.getBoardRealFile();
+      File prevFile = new File(savePath + "/" + prev);
+      if (prevFile.exists()) {
+        prevFile.delete();
+      }
+    } else {
+      boardFile = original.getBoardFile();
+      boardRealFile = original.getBoardRealFile();
     }
-    BoardDTO boardDTO = new BoardDTO();
-    boardDTO.setUserId(userId);
-    boardDTO.setBoardTitle(boardTitle);
-    boardDTO.setBoardContent(boardContent);
-    boardDTO.setBoardFile(boardFile);
-    boardDTO.setBoardRealFile(boardRealFile);
 
-    BoardDAO boardDAO = new BoardDAO();
-    boardDAO.writeArticle(boardDTO);
+    BoardDTO updateArticle = new BoardDTO();
+    updateArticle.setBoardNo(boardNo);
+    updateArticle.setBoardTitle(boardTitle);
+    updateArticle.setBoardContent(boardContent);
+    updateArticle.setBoardFile(boardFile);
+    updateArticle.setBoardRealFile(boardRealFile);
+
+
+    boardDAO.updateArticle(updateArticle);
 
     request.getSession().setAttribute("messageType", "성공 메시지");
-    request.getSession().setAttribute("messageContent", "성공적으로 게시물이 작성되었습니다.");
+    request.getSession().setAttribute("messageContent", "성공적으로 게시물이 수정되었습니다.");
     response.sendRedirect("boardList.jsp");
     return;
 

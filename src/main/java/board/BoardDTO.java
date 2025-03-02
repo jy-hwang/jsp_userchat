@@ -3,25 +3,25 @@ package board;
 public class BoardDTO {
 
   private int boardNo;
-  
+
   private String userId;
-  
+
   private String boardTitle;
-  
+
   private String boardContent;
-  
+
   private int boardHit;
-  
+
   private String boardFile;
-  
+
   private String boardRealFile;
-  
+
   private int boardGroup;
-  
+
   private int boardSequence;
-  
+
   private int boardLevel;
-  
+
   private String createdDate;
 
   private String updatedDate;
@@ -121,5 +121,5 @@ public class BoardDTO {
   public void setUpdatedDate(String updatedDate) {
     this.updatedDate = updatedDate;
   }
-  
+
 }

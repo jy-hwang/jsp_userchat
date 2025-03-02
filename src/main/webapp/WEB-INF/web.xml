@@ -52,7 +52,16 @@
     <servlet-name>UserUpdateInfoServlet</servlet-name>
     <url-pattern>/userUpdateInfo</url-pattern>
   </servlet-mapping>
-  
+
+  <servlet>
+    <servlet-name>UserUpdateProfileServlet</servlet-name>
+    <servlet-class>user.UserUpdateProfileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserUpdateProfileServlet</servlet-name>
+    <url-pattern>/userUpdateProfile</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>ChatSubmitServlet</servlet-name>
     <servlet-class>chat.ChatSubmitServlet</servlet-class>

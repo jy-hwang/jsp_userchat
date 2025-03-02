@@ -95,6 +95,7 @@ pageEncoding="UTF-8"%>
             </a>
              <ul class="dropdown-menu">
               <li class="active"><a href="updateInfo.jsp">회원정보수정</a></li>
+              <li><a href="updateProfile.jsp">프로필 수정</a></li>
               <li><a href="logoutAction.jsp">로그아웃</a></li>
             </ul>
           </li>

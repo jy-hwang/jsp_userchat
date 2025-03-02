@@ -162,7 +162,7 @@ public class UserDAO {
     ResultSet rSet = null;
 
     String sqlQuery =
-        " SELECT user_id AS userId, user_name AS userName, user_age AS userAge, user_gender AS userGender, user_email AS userEmail FROM users WHERE user_id = ? ";
+        " SELECT user_id AS userId, user_name AS userName, user_age AS userAge, user_gender AS userGender, user_email AS userEmail, user_profile AS userProfile FROM users WHERE user_id = ? ";
 
     try {
       conn = dataSource.getConnection();
@@ -216,6 +216,41 @@ public class UserDAO {
       pStmt.setString(4, userDTO.getUserEmail());
       pStmt.setString(5, userDTO.getUserId());
       
+      return pStmt.executeUpdate();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return -1;// 데이터베이스 오류
+  }
+
+  public int updateProfile(String userId, String userProfile) {
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+
+    String sqlQuery =
+        " UPDATE users SET user_profile = ?, updated_date = current_timestamp WHERE user_id = ?; ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+
+      pStmt.setString(1, userProfile);
+      pStmt.setString(2, userId);
+
       return pStmt.executeUpdate();
 
     } catch (Exception e) {

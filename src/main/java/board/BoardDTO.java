@@ -20,7 +20,7 @@ public class BoardDTO {
   
   private int boardSequence;
   
-  private int boardlevel;
+  private int boardLevel;
   
   private String createdDate;
 
@@ -98,12 +98,12 @@ public class BoardDTO {
     this.boardSequence = boardSequence;
   }
 
-  public int getBoardlevel() {
-    return boardlevel;
+  public int getBoardLevel() {
+    return boardLevel;
   }
 
-  public void setBoardlevel(int boardlevel) {
-    this.boardlevel = boardlevel;
+  public void setBoardLevel(int boardLevel) {
+    this.boardLevel = boardLevel;
   }
 
   public String getCreatedDate() {

@@ -270,4 +270,50 @@ public class UserDAO {
     return -1;// 데이터베이스 오류
   }
 
+  public String getUserProfile(String userId) {
+
+    UserDTO user = new UserDTO();
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery = " SELECT user_profile AS userProfile FROM users WHERE user_id = ? ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setString(1, userId);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        user.setUserId(userId);
+        if (rSet.getString("userProfile").equals("")) {
+          return "images/icon.png";
+        }
+        return "uploads/" + rSet.getString("userProfile");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return "images/icon.png";
+  }
+
+
+
 }

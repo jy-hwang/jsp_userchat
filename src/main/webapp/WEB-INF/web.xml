@@ -66,6 +66,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>UserFindServlet</servlet-name>
+    <servlet-class>user.UserFindServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserFindServlet</servlet-name>
+    <url-pattern>/userFind</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>ChatSubmitServlet</servlet-name>
     <servlet-class>chat.ChatSubmitServlet</servlet-class>
   </servlet>

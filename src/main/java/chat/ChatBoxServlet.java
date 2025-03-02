@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import user.UserDAO;
 import util.StringUtils;
 
 @WebServlet("/chatBoxServlet")
@@ -28,12 +29,12 @@ public class ChatBoxServlet extends HttpServlet {
     } else {
       try {
         HttpSession session = request.getSession();
+        userId = URLDecoder.decode(userId, "UTF-8");
         if (!userId.equals((String) session.getAttribute("userId"))) {
           response.getWriter().write("");
           return;
         }
 
-        userId = URLDecoder.decode(userId, "UTF-8");
         response.getWriter().write(getBox(userId) + "");
 
       } catch (Exception e) {
@@ -54,10 +55,17 @@ public class ChatBoxServlet extends HttpServlet {
     } else {
       for (int i = chatList.size() - 1; i >= 0; i--) {
         String unreadCount = "";
+        String userProfile = "";
 
         if (userId.equals(chatList.get(i).getToId())) {
           int unreadCountTemp = chatDAO.getCountUnreadChat(chatList.get(i).getFromId(), userId);
           unreadCount = unreadCountTemp > 0 ? Integer.toString(unreadCountTemp) : "";
+        }
+
+        if (userId.equals(chatList.get(i).getToId())) {
+          userProfile = new UserDAO().getUserProfile(chatList.get(i).getFromId());
+        } else {
+          userProfile = new UserDAO().getUserProfile(chatList.get(i).getToId());
         }
 
         // [{"fromId" : " + chatList.get(i).getFromId() + "},
@@ -65,7 +73,8 @@ public class ChatBoxServlet extends HttpServlet {
         result.append("{\"toId\" : \"" + chatList.get(i).getToId() + "\"},");
         result.append("{\"chatContent\" : \"" + chatList.get(i).getChatContent() + "\"},");
         result.append("{\"createdDate\" : \"" + chatList.get(i).getCreatedDate() + "\"},");
-        result.append("{\"unreadCount\" : \"" + unreadCount + "\"}]");
+        result.append("{\"unreadCount\" : \"" + unreadCount + "\"},");
+        result.append("{\"userProfile\" : \"" + userProfile + "\"}]");
         if (i != 0) {
           result.append(",");
         }

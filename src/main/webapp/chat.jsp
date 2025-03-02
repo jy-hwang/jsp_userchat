@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.net.URLDecoder"  %>
+<%@ page import="java.net.URLDecoder"%>
+<%@ page import="user.UserDAO"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,6 +35,10 @@ if (userId.equals(URLDecoder.decode(toId, "UTF-8"))) {
 	response.sendRedirect("index.jsp");
 	return;
 }
+
+String fromProfile = new UserDAO().getUserProfile(userId);
+String toProfile = new UserDAO().getUserProfile(toId);
+
 %>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -92,7 +97,9 @@ if (userId.equals(URLDecoder.decode(toId, "UTF-8"))) {
             <div class="clearfix"></div>
           </div>
           <div id="chat" class="panel-collapse collapse in">
-            <div id="chatList" class="portlet-body chat-widget" style="overflow-y: auto; width: auto; height: 600px;"></div>
+            <div id="chatList" class="portlet-body chat-widget" style="overflow-y: auto;
+  width: auto;
+  height: 600px;"></div>
             <div class="portlet-footer">
               <div class="row" style="height: 90px">
                 <div class="form-group col-xs-10">
@@ -134,7 +141,10 @@ if (userId.equals(URLDecoder.decode(toId, "UTF-8"))) {
   <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="vertical-alignment-helper">
       <div class="modal-dialog vertical-align-center">
-        <div class="modal-content <%if (messageType.equals("오류 메시지"))	out.println("panel-warning");else	out.println("panel-success");%>">
+        <div class="modal-content <%if (messageType.equals("오류 메시지"))
+	out.println("panel-warning");
+else
+	out.println("panel-success");%>">
           <div class="modal-header panel-heading">
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">&times</span> <span class="sr-only">Close</span>
@@ -153,15 +163,15 @@ if (userId.equals(URLDecoder.decode(toId, "UTF-8"))) {
       </div>
     </div>
   </div>
-<script>
+  <script>
   $('#messageModal').modal('show');
 </script>
-<%
+  <%
   session.removeAttribute("messageType");
   session.removeAttribute("messageContent");
   }
-%>
-  
+  %>
+
 </body>
 <script type="text/javascript">
   function autoClosingAlert(selector, delay){
@@ -233,19 +243,36 @@ if (userId.equals(URLDecoder.decode(toId, "UTF-8"))) {
   }
 
   function addChat(chatName, chatContent, chatTime) {
-    $('#chatList')
+    if(chatName == '나'){
+      $('#chatList')
         .append(
-            '<div class="row">'
-                + '<div class="col-lg-12">'
-                + '<div class="media">'
-                + '<a class="pull-left" href="#">'
-                + '<img class="media-object img-circle" style="width: 30px; height: 30px;" src="images/icon.png" alf="">'
-                + '</a>' + '<div class="media-body">'
-                + '<h4 class="media-heading">' + chatName
-                + '<span class="small pull-right">' + chatTime + '</span>'
-                + '</h4>'+'<p>'+ chatContent + '</p>' + '</div>' + '</div>' + '</div>' + '</div>'
-                + '<hr>');
+          '<div class="row">'
+              + '<div class="col-lg-12">'
+              + '<div class="media">'
+              + '<a class="pull-left" href="#">'
+              + '<img class="media-object img-circle" style="width: 30px; height: 30px;" src="<%= fromProfile %>" alf="">'
+              + '</a>' + '<div class="media-body">'
+              + '<h4 class="media-heading">' + chatName
+              + '<span class="small pull-right">' + chatTime + '</span>'
+              + '</h4>'+'<p>'+ chatContent + '</p>' + '</div>' + '</div>' + '</div>' + '</div>'
+              + '<hr>');
 
+    } else {
+      $('#chatList')
+        .append(
+          '<div class="row">'
+              + '<div class="col-lg-12">'
+              + '<div class="media">'
+              + '<a class="pull-left" href="#">'
+              + '<img class="media-object img-circle" style="width: 30px; height: 30px;" src="<%= toProfile %>" alf="">'
+              + '</a>' + '<div class="media-body">'
+              + '<h4 class="media-heading">' + chatName
+              + '<span class="small pull-right">' + chatTime + '</span>'
+              + '</h4>'+'<p>'+ chatContent + '</p>' + '</div>' + '</div>' + '</div>' + '</div>'
+              + '<hr>');
+      
+      
+    }
   $('#chatList').scrollTop($('#chatList')[0].scrollHeight);
   }
   
@@ -260,31 +287,30 @@ if (userId.equals(URLDecoder.decode(toId, "UTF-8"))) {
       type : "post",
       url : './chatUnread',
       data : {
-        userId : encodeURIComponent("<%= userId %>")
+        userId : encodeURIComponent("<%=userId%>")
       },
-      success : function(result){
-        if(result > 0){
+      success : function(result) {
+        if (result > 0) {
           showUnread(result);
-        } else{
+        } else {
           showUnread('');
         }
       }
     });
   }
-  
-  function getInfiniteUnread(){
-    setInterval(function(){
+
+  function getInfiniteUnread() {
+    setInterval(function() {
       getUnread();
     }, 3000);
   }
-  
-  function showUnread(result){
+
+  function showUnread(result) {
     $("#unread").html(result);
   }
-  
 </script>
 <script type="text/javascript">
-  $(document).ready(function(){
+  $(document).ready(function() {
     chatListFunction('ten');
     getInfiniteChat();
     getUnread();

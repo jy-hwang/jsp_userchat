@@ -35,7 +35,7 @@ public class ChatListServlet extends HttpServlet {
     } else {
       try {
         HttpSession session = request.getSession();
-        if (!fromId.equals((String) session.getAttribute("userId"))) {
+        if (!URLDecoder.decode(fromId, "UTF-8").equals((String) session.getAttribute("userId"))) {
           response.getWriter().write("");
           return;
         }

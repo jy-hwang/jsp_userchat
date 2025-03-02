@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@ page import="utils.StringUtils" %>
 <%@ page import="user.UserDTO" %>
 <%@ page import="user.UserDAO" %>
 <%@ page import="board.BoardDTO" %>
@@ -22,13 +23,14 @@ pageEncoding="UTF-8"%>
   
   UserDTO user = new UserDAO().getUser(userId);
   
-  int boardNo = Integer.parseInt(request.getParameter("boardNo"));
-  if(boardNo == 0){
+  String tempBoardNo = request.getParameter("boardNo");
+  if(StringUtils.isEmpty(tempBoardNo)){
     session.setAttribute("messageType", "오류 메시지");
-    session.setAttribute("messageContent", "접근할 수 없습니다.");
+    session.setAttribute("messageContent", "게시물을 선택해주세요.");
     response.sendRedirect("index.jsp");
-    return;
+    return;    
   }
+  int boardNo = Integer.parseInt(tempBoardNo);
   
   BoardDAO boardDAO = new BoardDAO();
   BoardDTO board = boardDAO.getOne(boardNo);

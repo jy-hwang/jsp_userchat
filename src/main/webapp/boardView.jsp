@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@ page import="utils.StringUtils" %>
 <%@ page import="board.BoardDAO" %>
 <%@ page import="board.BoardDTO" %>
 <!DOCTYPE html>
@@ -16,9 +17,17 @@ pageEncoding="UTF-8"%>
     response.sendRedirect("login.jsp");
     return;
   }
-  int boardNo = Integer.parseInt(request.getParameter("boardNo"));
+  
+  String tempBoardNo = request.getParameter("boardNo");
+  if(StringUtils.isEmpty(tempBoardNo)){
+    session.setAttribute("messageType", "오류 메시지");
+    session.setAttribute("messageContent", "게시물을 선택해주세요.");
+    response.sendRedirect("index.jsp");
+    return;    
+  }
+  int boardNo = Integer.parseInt(tempBoardNo);
+  
   BoardDAO boardDAO = new BoardDAO();
-    
   BoardDTO board = boardDAO.getOne(boardNo);
   boardDAO.hit(boardNo);
 %>

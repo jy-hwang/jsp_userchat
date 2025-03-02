@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import user.UserDAO;
-import util.StringUtils;
+import utils.StringUtils;
 
 @WebServlet("/chatBoxServlet")
 public class ChatBoxServlet extends HttpServlet {

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import util.StringUtils;
+import utils.StringUtils;
 
 @WebServlet("/boardWriteServlet")
 public class BoardWriteServlet extends HttpServlet {

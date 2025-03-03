@@ -146,4 +146,13 @@
     <url-pattern>/boardArticleDelete</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>BoardReplyWriteServlet</servlet-name>
+    <servlet-class>board.BoardReplyWriteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BoardReplyWriteServlet</servlet-name>
+    <url-pattern>/boardReplyWrite</url-pattern>
+  </servlet-mapping>
+
 </web-app>

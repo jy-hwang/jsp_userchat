@@ -18,7 +18,6 @@ public class UserDAO {
       Context envCtx = (Context) initCtx.lookup("java:/comp/env");
       dataSource = (DataSource) envCtx.lookup("jdbc/UserChat");
 
-
     } catch (Exception e) {
       e.printStackTrace();
     }

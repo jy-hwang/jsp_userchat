@@ -12,8 +12,8 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import utils.StringUtils;
 
-@WebServlet("/boardArticleUpdateServlet")
-public class BoardArticleUpdateServlet extends HttpServlet {
+@WebServlet("/boardReplyWriteServlet")
+public class BoardReplyWriteServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,27 +43,22 @@ public class BoardArticleUpdateServlet extends HttpServlet {
       response.sendRedirect("index.jsp");
       return;
     }
-    int boardNo = Integer.parseInt(multi.getParameter("boardNo"));
-    if (boardNo == 0) {
-      request.getSession().setAttribute("messageType", "오류 메시지");
-      request.getSession().setAttribute("messageContent", "접근할 수 없습니다.");
+
+    String tempParentBoardNo = multi.getParameter("parentBoardNo");
+    if (StringUtils.isEmpty(tempParentBoardNo)) {
+      session.setAttribute("messageType", "오류 메시지");
+      session.setAttribute("messageContent", "게시물을 선택해주세요.");
       response.sendRedirect("index.jsp");
       return;
     }
-    BoardDAO boardDAO = new BoardDAO();
-    BoardDTO original = boardDAO.getOne(boardNo);
-    if (!userId.equals(original.getUserId())) {
-      request.getSession().setAttribute("messageType", "오류 메시지");
-      request.getSession().setAttribute("messageContent", "접근할 수 없습니다.");
-      response.sendRedirect("boardList.jsp");
-      return;
-    }
+    int parentBoardNo = Integer.parseInt(tempParentBoardNo);
+
     String boardTitle = multi.getParameter("boardTitle");
     String boardContent = multi.getParameter("boardContent");
     if (StringUtils.isEmpty(boardTitle) || StringUtils.isEmpty(boardContent)) {
       request.getSession().setAttribute("messageType", "오류 메시지");
       request.getSession().setAttribute("messageContent", "내용을 모두 채워주세요.");
-      response.sendRedirect("index.jsp");
+      response.sendRedirect("boardList.jsp");
       return;
     }
 
@@ -75,26 +70,21 @@ public class BoardArticleUpdateServlet extends HttpServlet {
     if (file != null) {
       boardFile = multi.getOriginalFileName("boardFile");
       boardRealFile = file.getName();
-      String prev = original.getBoardRealFile();
-      File prevFile = new File(savePath + "/" + prev);
-      if (prevFile.exists()) {
-        prevFile.delete();
-      }
-    } else {
-      boardFile = original.getBoardFile();
-      boardRealFile = original.getBoardRealFile();
     }
+    BoardDTO child = new BoardDTO();
+    child.setUserId(userId);
+    child.setBoardTitle(boardTitle);
+    child.setBoardContent(boardContent);
+    child.setBoardFile(boardFile);
+    child.setBoardRealFile(boardRealFile);
 
-    BoardDTO updateArticle = new BoardDTO();
-    updateArticle.setBoardNo(boardNo);
-    updateArticle.setBoardTitle(boardTitle);
-    updateArticle.setBoardContent(boardContent);
-    updateArticle.setBoardFile(boardFile);
-    updateArticle.setBoardRealFile(boardRealFile);
-    boardDAO.updateArticle(updateArticle);
+    BoardDAO boardDAO = new BoardDAO();
+    BoardDTO parent = boardDAO.getOne(parentBoardNo);
+    boardDAO.updateReplySequence(parent);
+    boardDAO.writeReply(parent, child);
 
     request.getSession().setAttribute("messageType", "성공 메시지");
-    request.getSession().setAttribute("messageContent", "성공적으로 게시물이 수정되었습니다.");
+    request.getSession().setAttribute("messageContent", "성공적으로 답변이 작성되었습니다.");
     response.sendRedirect("boardList.jsp");
     return;
 

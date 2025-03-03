@@ -125,7 +125,15 @@ pageEncoding="UTF-8"%>
 %>
           <tr>
             <td><%= board.getBoardNo() %></td>
-            <td style="text-align: left;"><a href="boardArticleView.jsp?boardNo=<%= board.getBoardNo() %>">
+            <td style="text-align: left;">
+<%
+  if(board.getBoardAvailable() != 0){
+%>
+          <a href="boardArticleView.jsp?boardNo=<%= board.getBoardNo() %>">
+<%
+  }
+%>
+  
 <%
   for(int j = 0; j < board.getBoardLevel(); j++){
 %>            
@@ -133,8 +141,18 @@ pageEncoding="UTF-8"%>
 <%
   }
 %>
-            
-            <%= board.getBoardTitle() %></a></td>
+<%
+  if(board.getBoardAvailable() == 0){
+%>
+<span>(삭제된 게시물입니다.)</span>
+<%
+  } else {
+%>
+            <%= board.getBoardTitle() %>
+<%
+  }
+%>
+            </a></td>
             <td><%= board.getUserId() %></td>
             <td><%= board.getCreatedDate() %></td>
             <td><%= board.getBoardHit() %></td>

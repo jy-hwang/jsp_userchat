@@ -22,6 +22,8 @@ public class BoardDTO {
 
   private int boardLevel;
 
+  private int boardAvailable;
+  
   private String createdDate;
 
   private String updatedDate;
@@ -104,6 +106,14 @@ public class BoardDTO {
 
   public void setBoardLevel(int boardLevel) {
     this.boardLevel = boardLevel;
+  }
+
+  public int getBoardAvailable() {
+    return boardAvailable;
+  }
+
+  public void setBoardAvailable(int boardAvailable) {
+    this.boardAvailable = boardAvailable;
   }
 
   public String getCreatedDate() {

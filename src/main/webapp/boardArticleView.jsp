@@ -29,6 +29,12 @@ pageEncoding="UTF-8"%>
   
   BoardDAO boardDAO = new BoardDAO();
   BoardDTO board = boardDAO.getOne(boardNo);
+  if(board.getBoardAvailable() == 0){
+    session.setAttribute("messageType", "오류 메시지");
+    session.setAttribute("messageContent", " 삭제된 게시물입니다.");
+    response.sendRedirect("boardList.jsp");
+    return; 
+  }
   boardDAO.hit(boardNo);
 %>
   <head>
@@ -135,7 +141,7 @@ pageEncoding="UTF-8"%>
             <td style="background-color: #fafafa; color: #000; width: 80px"><h5>작성날짜</h5></td>
             <td><h5><%= board.getCreatedDate() %></h5></td>
             <td style="background-color: #fafafa; color: #000; width: 80px"><h5>조회수</h5></td>
-            <td><h5><%= board.getBoardHit() %></h5></td>
+            <td><h5><%= board.getBoardHit() + 1 %></h5></td>
           </tr>
           <tr>
             <td style="background-color: #fafafa; color: #000; width: 80px"><h5>내용</h5></td>

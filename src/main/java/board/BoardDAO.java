@@ -72,7 +72,7 @@ public class BoardDAO {
     ResultSet rSet = null;
 
     String sqlQuery =
-        " SELECT board_no AS boardNo, user_id AS userId, board_title AS boardTitle, board_content AS boardContent, board_hit AS boardHit, board_file AS boardFile, board_real_file AS boardRealFile, board_group AS boardGroup, board_sequence AS boardSequence, board_level AS boardLevel, board_available AS boardAvailable, created_date AS createdDate, updated_date AS updatedDate FROM boards WHERE board_no = ? and board_available = 1 ";
+        " SELECT board_no AS boardNo, user_id AS userId, board_title AS boardTitle, board_content AS boardContent, board_hit AS boardHit, board_file AS boardFile, board_real_file AS boardRealFile, board_group AS boardGroup, board_sequence AS boardSequence, board_level AS boardLevel, board_available AS boardAvailable, created_date AS createdDate, updated_date AS updatedDate FROM boards WHERE board_no = ? ";
 
     try {
       conn = dataSource.getConnection();
@@ -93,6 +93,7 @@ public class BoardDAO {
         board.setBoardGroup(rSet.getInt("boardGroup"));
         board.setBoardSequence(rSet.getInt("boardSequence"));
         board.setBoardLevel(rSet.getInt("boardLevel"));
+        board.setBoardAvailable(rSet.getInt("boardAvailable"));
         board.setCreatedDate(rSet.getString("createdDate").substring(0, 11));
         if (rSet.getString("updatedDate") != null) {
           board.setUpdatedDate(rSet.getString("updatedDate").substring(0, 11));
@@ -128,7 +129,7 @@ public class BoardDAO {
     ResultSet rSet = null;
 
     String sqlQuery =
-        " SELECT board_no AS boardNo, user_id AS userId, board_title AS boardTitle, board_hit AS boardHit, board_group AS boardGroup, board_sequence AS boardSequence, board_level AS boardLevel, created_date AS createdDate, updated_date AS updatedDate FROM boards WHERE board_available = 1 ORDER BY board_group DESC, board_sequence ASC ";
+        " SELECT board_no AS boardNo, user_id AS userId, board_title AS boardTitle, board_hit AS boardHit, board_group AS boardGroup, board_sequence AS boardSequence, board_level AS boardLevel, board_available AS boardAvailable, created_date AS createdDate, updated_date AS updatedDate FROM boards ORDER BY board_group DESC, board_sequence ASC ";
     boardList = new ArrayList<BoardDTO>();
     try {
       conn = dataSource.getConnection();
@@ -141,14 +142,15 @@ public class BoardDAO {
         board.setUserId(rSet.getString("userId"));
         board.setBoardTitle(rSet.getString("boardTitle").replaceAll(" ", "&nbsp;")
             .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
-        board.setCreatedDate(rSet.getString("createdDate").substring(0, 11));
-        if (rSet.getString("updatedDate") != null) {
-          board.setUpdatedDate(rSet.getString("updatedDate").substring(0, 11));
-        }
         board.setBoardHit(rSet.getInt("boardHit"));
         board.setBoardGroup(rSet.getInt("boardGroup"));
         board.setBoardSequence(rSet.getInt("boardSequence"));
         board.setBoardLevel(rSet.getInt("boardLevel"));
+        board.setBoardAvailable(rSet.getInt("boardAvailable"));
+        board.setCreatedDate(rSet.getString("createdDate").substring(0, 11));
+        if (rSet.getString("updatedDate") != null) {
+          board.setUpdatedDate(rSet.getString("updatedDate").substring(0, 11));
+        }
         boardList.add(board);
       }
     } catch (Exception e) {

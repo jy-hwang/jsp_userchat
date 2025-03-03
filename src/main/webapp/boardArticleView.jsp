@@ -1,11 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ page import="utils.StringUtils" %>
-<%@ page import="user.UserDTO" %>
-<%@ page import="user.UserDAO" %>
-<%@ page import="board.BoardDTO" %>
 <%@ page import="board.BoardDAO" %>
-
+<%@ page import="board.BoardDTO" %>
 <!DOCTYPE html>
 <html>
 <%
@@ -21,8 +18,6 @@ pageEncoding="UTF-8"%>
     return;
   }
   
-  UserDTO user = new UserDAO().getUser(userId);
-  
   String tempBoardNo = request.getParameter("boardNo");
   if(StringUtils.isEmpty(tempBoardNo)){
     session.setAttribute("messageType", "오류 메시지");
@@ -34,12 +29,7 @@ pageEncoding="UTF-8"%>
   
   BoardDAO boardDAO = new BoardDAO();
   BoardDTO board = boardDAO.getOne(boardNo);
-  if(!userId.equals(board.getUserId())){
-    session.setAttribute("messageType", "오류 메시지");
-    session.setAttribute("messageContent", "접근할 수 없습니다.");
-    response.sendRedirect("index.jsp");
-    return;
-  }
+  boardDAO.hit(boardNo);
 %>
   <head>
     <meta charset="UTF-8" />
@@ -80,7 +70,6 @@ pageEncoding="UTF-8"%>
   </head>
   <body>
 
-  
     <nav class="navbar navbar-default">
       <div class="navbar-header">
         <button
@@ -116,64 +105,62 @@ pageEncoding="UTF-8"%>
               >회원관리 <span class="caret"></span>
             </a>
              <ul class="dropdown-menu">
-              <li><a href="updateInfo.jsp">회원정보수정</a></li>
-              <li><a href="updatePassword.jsp">비밀번호 변경</a></li>
-              <li><a href="updateProfile.jsp">프로필 수정</a></li>
-              <li><a href="logoutAction.jsp">로그아웃</a></li>
+               <li><a href="updateInfo.jsp">회원정보수정</a></li>
+               <li><a href="updatePassword.jsp">비밀번호 변경</a></li>
+               <li><a href="updateProfile.jsp">프로필 수정</a></li>
+               <li><a href="logoutAction.jsp">로그아웃</a></li>
             </ul>
           </li>
         </ul>
+
       </div>
     </nav>
     <div class="container">
-      <form method="post" action="./boardUpdate" enctype="multipart/form-data">
-        <table class="table table-borderd table-hover" style="text-align: center; border: 1px solid #ddd">
-          <thead>
+      <table class="table table-bordered table-hover" style="text-align: center; border: 1px solid #ddd">
+        <thead>
           <tr>
-            <th colspan ="3" ><h4>게시물 수정 양식</h4></th>
+            <th colspan="4"><h4>게시물 보기</h4></th>
           </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="width: 110px;"><h5>아이디</h5></td>
-              <td><h5><%= user.getUserId() %></h5>
-                <input type="hidden" name="userId" value="<%= user.getUserId() %>"/>
-                <input type="hidden" name="boardNo" value="<%= boardNo %>"/>
-              </td>
-            </tr>
-            
-            <tr>
-              <td style="width: 110px;"><h5>글 제목</h5></td>
-              <td><input class="form-control" type="text" name="boardTitle" placeholder="글 제목을 입력하세요." maxlength="50" value="<%=board.getBoardTitle()%>"/></td>
-            </tr>
-            
-            <tr>
-              <td style="width: 110px;"><h5>글 내용</h5></td>
-              <td><textarea class="form-control" name="boardContent" placeholder="글 내용을 입력하세요." rows="10" maxlength="2048"><%=board.getBoardContent()%></textarea></td>
-            </tr>
-           
-            <tr>
-              <td style="width: 110px;"><h5>파일 업로드</h5></td>
-              <td colspan="2">
-                <input type="file" name="boardFile" class="file">
-                <div class="input-group col-xs-12">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
-                  <input type="text" class="form-control input-lg" disabled placeholder="<%= board.getBoardFile() %>">
-                  <span class="input-group-btn">
-                    <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i>파일 찾기</button>
-                  </span>
-                </div>
-              </td>
-            </tr>
-             <tr>
-              <td style="text-align:left;" colspan="3"><h5 style="color:red;"></h5>
-              <input class="btn btn-primary pull-right" type="submit" value="수정"/>
-              </td>
-            </tr>
-          </tbody>
-        
-        </table>
-      </form>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="background-color: #fafafa; color: #000; width: 80px"><h5>제목</h5></td>
+            <td colspan="3"><h5><%= board.getBoardTitle() %></h5></td>
+          </tr>
+          <tr>
+            <td style="background-color: #fafafa; color: #000; width: 80px"><h5>작성자</h5></td>
+            <td colspan="3"><h5><%= board.getUserId() %></h5></td>
+          </tr>
+          <tr>
+            <td style="background-color: #fafafa; color: #000; width: 80px"><h5>작성날짜</h5></td>
+            <td><h5><%= board.getCreatedDate() %></h5></td>
+            <td style="background-color: #fafafa; color: #000; width: 80px"><h5>조회수</h5></td>
+            <td><h5><%= board.getBoardHit() %></h5></td>
+          </tr>
+          <tr>
+            <td style="background-color: #fafafa; color: #000; width: 80px"><h5>내용</h5></td>
+            <td colspan="3" style="text-align:left;"><h5><%= board.getBoardContent() %></h5></td>
+          </tr>
+          <tr>
+            <td style="vertical-align:middle; min-height:150px; background-color: #fafafa; color: #000; width: 80px"><h5>첨부파일</h5></td>
+            <td colspan="3" ><h5><a href="boardDownload.jsp?boardNo=<%=board.getBoardNo() %>"><%= board.getBoardFile() %></a></h5></td>
+          </tr>
+          <tr>
+            <td colspan="5" style="text-align: center;">
+              <a href="boardList.jsp" class="btn btn-secondary">목록</a>
+              <a href="boardReplyWrite.jsp?boardNo=<%= board.getBoardNo() %>" class="btn btn-danger">답변</a>
+<%
+  if(userId.equals(board.getUserId())){
+%>
+              <a href="boardArticleUpdate.jsp?boardNo=<%= board.getBoardNo() %>" class="btn btn-primary">수정</a>
+              <a href="boardArticleDelete?boardNo=<%= board.getBoardNo() %>" class="btn btn-warning" onclick="return confirm('정말로 삭제하시겠습니까?')">삭제</a>
+<%
+  }
+%>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 <%
   String messageType = null;
@@ -234,15 +221,6 @@ pageEncoding="UTF-8"%>
 <%
   }
 %>
-<script type="text/javascript">
- $(document).on('click','.browse', function(){
-  var file = $(this).parent().parent().parent().find('.file');
-  file.trigger('click');
- });
- 
- $(document).on('change','.file',function(){
-  $(this).parent().find('.form-control').val($(this).val().replace(/c:\\fakepath\\/i,'')); 
- });
-</script>
+
   </body>
 </html>

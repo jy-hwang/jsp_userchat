@@ -125,7 +125,7 @@ pageEncoding="UTF-8"%>
 %>
           <tr>
             <td><%= board.getBoardNo() %></td>
-            <td style="text-align: left;"><a href="boardView.jsp?boardNo=<%= board.getBoardNo() %>"><%= board.getBoardTitle() %></a></td>
+            <td style="text-align: left;"><a href="boardArticleView.jsp?boardNo=<%= board.getBoardNo() %>"><%= board.getBoardTitle() %></a></td>
             <td><%= board.getUserId() %></td>
             <td><%= board.getCreatedDate() %></td>
             <td><%= board.getBoardHit() %></td>
@@ -134,7 +134,7 @@ pageEncoding="UTF-8"%>
   }
 %>
           <tr>
-            <td colspan="5"><a href="boardWrite.jsp" class="btn btn-primary pull-right" type="submit">글쓰기</a></td>
+            <td colspan="5"><a href="boardArticleWrite.jsp" class="btn btn-primary pull-right" type="submit">글쓰기</a></td>
           </tr>
         </tbody>
       </table>

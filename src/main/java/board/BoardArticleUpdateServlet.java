@@ -12,8 +12,8 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import utils.StringUtils;
 
-@WebServlet("/boardUpdateServlet")
-public class BoardUpdateServlet extends HttpServlet {
+@WebServlet("/boardArticleUpdateServlet")
+public class BoardArticleUpdateServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)

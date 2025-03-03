@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@ page import="utils.StringUtils" %>
 <%@ page import="user.UserDTO" %>
 <%@ page import="user.UserDAO" %>
+<%@ page import="board.BoardDTO" %>
+<%@ page import="board.BoardDAO" %>
 
 <!DOCTYPE html>
 <html>
@@ -19,6 +22,24 @@ pageEncoding="UTF-8"%>
   }
   
   UserDTO user = new UserDAO().getUser(userId);
+  
+  String tempBoardNo = request.getParameter("boardNo");
+  if(StringUtils.isEmpty(tempBoardNo)){
+    session.setAttribute("messageType", "오류 메시지");
+    session.setAttribute("messageContent", "게시물을 선택해주세요.");
+    response.sendRedirect("index.jsp");
+    return;    
+  }
+  int boardNo = Integer.parseInt(tempBoardNo);
+  
+  BoardDAO boardDAO = new BoardDAO();
+  BoardDTO board = boardDAO.getOne(boardNo);
+  if(!userId.equals(board.getUserId())){
+    session.setAttribute("messageType", "오류 메시지");
+    session.setAttribute("messageContent", "접근할 수 없습니다.");
+    response.sendRedirect("index.jsp");
+    return;
+  }
 %>
   <head>
     <meta charset="UTF-8" />
@@ -105,28 +126,30 @@ pageEncoding="UTF-8"%>
       </div>
     </nav>
     <div class="container">
-      <form method="post" action="./boardWrite" enctype="multipart/form-data">
+      <form method="post" action="./boardArticleUpdate" enctype="multipart/form-data">
         <table class="table table-borderd table-hover" style="text-align: center; border: 1px solid #ddd">
           <thead>
           <tr>
-            <th colspan ="3" ><h4>게시물 작성 양식</h4></th>
+            <th colspan ="3" ><h4>게시물 수정 양식</h4></th>
           </tr>
           </thead>
           <tbody>
             <tr>
               <td style="width: 110px;"><h5>아이디</h5></td>
               <td><h5><%= user.getUserId() %></h5>
-              <input type="hidden" name="userId" value="<%= user.getUserId() %>"/></td>
+                <input type="hidden" name="userId" value="<%= user.getUserId() %>"/>
+                <input type="hidden" name="boardNo" value="<%= boardNo %>"/>
+              </td>
             </tr>
             
             <tr>
               <td style="width: 110px;"><h5>글 제목</h5></td>
-              <td><input class="form-control" type="text" name="boardTitle" placeholder="글 제목을 입력하세요." maxlength="50"/></td>
+              <td><input class="form-control" type="text" name="boardTitle" placeholder="글 제목을 입력하세요." maxlength="50" value="<%=board.getBoardTitle()%>" required/></td>
             </tr>
             
             <tr>
               <td style="width: 110px;"><h5>글 내용</h5></td>
-              <td><textarea class="form-control" name="boardContent" placeholder="글 내용을 입력하세요." rows="10" maxlength="2048"></textarea></td>
+              <td><textarea class="form-control" name="boardContent" placeholder="글 내용을 입력하세요." rows="10" maxlength="2048" required><%=board.getBoardContent()%></textarea></td>
             </tr>
            
             <tr>
@@ -135,7 +158,7 @@ pageEncoding="UTF-8"%>
                 <input type="file" name="boardFile" class="file">
                 <div class="input-group col-xs-12">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
-                  <input type="text" class="form-control input-lg" disabled placeholder="파일을 업로드하세요.">
+                  <input type="text" class="form-control input-lg" disabled placeholder="<%= board.getBoardFile() %>">
                   <span class="input-group-btn">
                     <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i>파일 찾기</button>
                   </span>
@@ -144,7 +167,7 @@ pageEncoding="UTF-8"%>
             </tr>
              <tr>
               <td style="text-align:left;" colspan="3"><h5 style="color:red;"></h5>
-              <input class="btn btn-primary pull-right" type="submit" value="등록"/>
+              <input class="btn btn-primary pull-right" type="submit" value="수정"/>
               </td>
             </tr>
           </tbody>

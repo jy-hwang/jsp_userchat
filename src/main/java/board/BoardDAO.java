@@ -120,7 +120,7 @@ public class BoardDAO {
     return board;
   }
 
-  public ArrayList<BoardDTO> getList() {
+  public ArrayList<BoardDTO> getList(String pageNumber) {
 
     ArrayList<BoardDTO> boardList = null;
 
@@ -129,11 +129,14 @@ public class BoardDAO {
     ResultSet rSet = null;
 
     String sqlQuery =
-        " SELECT board_no AS boardNo, user_id AS userId, board_title AS boardTitle, board_hit AS boardHit, board_group AS boardGroup, board_sequence AS boardSequence, board_level AS boardLevel, board_available AS boardAvailable, created_date AS createdDate, updated_date AS updatedDate FROM boards ORDER BY board_group DESC, board_sequence ASC ";
+        " SELECT board_no AS boardNo, user_id AS userId, board_title AS boardTitle, board_hit AS boardHit, board_group AS boardGroup, board_sequence AS boardSequence, board_level AS boardLevel, board_available AS boardAvailable, created_date AS createdDate, updated_date AS updatedDate FROM boards WHERE board_group > (SELECT max(board_group) FROM boards) - ? AND board_group <= (SELECT max(board_group) FROM boards ) - ?  ORDER BY board_group DESC, board_sequence ASC ";
     boardList = new ArrayList<BoardDTO>();
     try {
       conn = dataSource.getConnection();
       pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setInt(1, Integer.parseInt(pageNumber) * 10);
+      pStmt.setInt(2, (Integer.parseInt(pageNumber) - 1) * 10);
+
       rSet = pStmt.executeQuery();
 
       while (rSet.next()) {
@@ -205,6 +208,86 @@ public class BoardDAO {
     }
 
     return -1;// 데이터베이스 오류
+  }
+
+  public boolean isNextPage(String pageNumber) {
+
+    BoardDTO board = new BoardDTO();
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery = " SELECT board_title AS boardTitle FROM boards WHERE board_group >= ? ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setInt(1, Integer.parseInt(pageNumber) * 10);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        return true;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return false;
+  }
+
+  public int targetPage(String pageNumber) {
+
+    BoardDTO board = new BoardDTO();
+
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    String sqlQuery = " SELECT COUNT(board_group) FROM boards WHERE board_group > ? ";
+
+    try {
+      conn = dataSource.getConnection();
+      pStmt = conn.prepareStatement(sqlQuery);
+      pStmt.setInt(1, (Integer.parseInt(pageNumber) -1) * 10);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        return rSet.getInt(1) / 10;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return 0;
   }
 
   public String getFile(int boardNo) {

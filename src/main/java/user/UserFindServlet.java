@@ -25,7 +25,7 @@ public class UserFindServlet extends HttpServlet {
       try {
         response.getWriter().write(find(userId));
       } catch (Exception e) {
-        e.printStackTrace();
+        System.out.println(Thread.currentThread().getStackTrace()[1].getClassName() + " : " + e.getMessage());
         response.getWriter().write("-1");
       }
     } else {

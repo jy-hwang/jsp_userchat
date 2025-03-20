@@ -43,6 +43,7 @@ public class ChatListServlet extends HttpServlet {
         response.getWriter().write(getNo(URLDecoder.decode(fromId, "UTF-8"),
             URLDecoder.decode(toId, "UTF-8"), Integer.parseInt(listType)));
       } catch (Exception e) {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getClassName() + " : " + e.getMessage());
         response.getWriter().write("");
       }
     }

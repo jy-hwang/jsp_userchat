@@ -38,6 +38,7 @@ public class ChatBoxServlet extends HttpServlet {
         response.getWriter().write(getBox(userId) + "");
 
       } catch (Exception e) {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getClassName() + " : " + e.getMessage());
         response.getWriter().write("");
       }
     }

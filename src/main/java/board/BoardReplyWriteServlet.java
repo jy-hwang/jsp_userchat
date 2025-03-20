@@ -29,8 +29,9 @@ public class BoardReplyWriteServlet extends HttpServlet {
       multi = new MultipartRequest(request, savePath, fileMaxSize, "UTF-8",
           new DefaultFileRenamePolicy());
     } catch (Exception e) {
+      System.out.println(Thread.currentThread().getStackTrace()[1].getClassName() + " : " + e.getMessage());
       request.getSession().setAttribute("messageType", "오류 메시지");
-      request.getSession().setAttribute("messageContent", "파일 크기는 10MB를 초과할 수 없습니다.");
+      request.getSession().setAttribute("messageContent", "오류가 발생했습니다.");
       response.sendRedirect("index.jsp");
       return;
     }

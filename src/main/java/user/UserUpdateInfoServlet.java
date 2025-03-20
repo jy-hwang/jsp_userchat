@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import utils.StringUtils;
 
-@WebServlet("/userUpdateInfoServlet")
+@WebServlet("/userUpdateInfo")
 public class UserUpdateInfoServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 

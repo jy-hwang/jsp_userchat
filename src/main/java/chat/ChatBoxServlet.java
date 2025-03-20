@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import user.UserDAO;
 import utils.StringUtils;
 
-@WebServlet("/chatBoxServlet")
+@WebServlet("/chatBox")
 public class ChatBoxServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 

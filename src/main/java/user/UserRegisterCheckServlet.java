@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import utils.StringUtils;
 
-@WebServlet("/userRegisterCheckServlet")
+@WebServlet("/userRegisterCheck")
 public class UserRegisterCheckServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 

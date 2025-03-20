@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import utils.StringUtils;
 
-@WebServlet("/chatListServlet")
+@WebServlet("/chatList")
 public class ChatListServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 

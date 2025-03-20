@@ -12,7 +12,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import utils.StringUtils;
 
-@WebServlet("/boardArticleUpdateServlet")
+@WebServlet("/boardArticleUpdate")
 public class BoardArticleUpdateServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
